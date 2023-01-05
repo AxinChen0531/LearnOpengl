@@ -3,6 +3,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "Log.h"
+#include "Shader.h"
+#include "Material.h"
+
 using namespace std;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
@@ -16,23 +20,25 @@ int main()
 {
 	//GLFW init
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
 	GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", nullptr, nullptr);
 	if (window == nullptr) {
-		std::cout << "Failed to create GLFW window" << std::endl;
+		Log::Error("Failed to create GLFW window", "GLFW ERROR");
 		glfwTerminate();
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	//V-sync
+	glfwSwapInterval(1);
 
 	//GLEW init
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
-		std::cout << "Failed to initialize GLEW" << std::endl;
+		Log::Error("Failed to initialize GLEW", "GLEW ERROR");
 		return -1;
 	}
 
@@ -41,7 +47,7 @@ int main()
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 
-	//按键消息回调
+	//注册按键消息回调
 	glfwSetKeyCallback(window, key_callback);
 
 	//正面绘制面，背面绘制框
@@ -59,31 +65,23 @@ int main()
 		3, 2, 1  // 第二个三角形（左下），逆时针正对
 	};
 
-	GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
-	GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
 	const char* vss =
+		"#version 330 core\n"
 		"layout(location = 0) in vec3 position;\n"
 		"void main()\n"
 		"{\n"
 		"	gl_Position = vec4(position.x, position.y, position.z, 1.0);\n"
 		"}";
 	const char* fss =
+		"#version 330 core\n"
 		"out vec4 color;\n"
 		"void main()\n"
 		"{\n"
 		"	color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 		"}";
 
-	glShaderSource(vshader, 1, &vss, NULL);
-	glShaderSource(fshader, 1, &fss, NULL);
-	glCompileShader(vshader);
-	glCompileShader(fshader);
-	GLuint shaderprogram = glCreateProgram();
-	glAttachShader(shaderprogram, vshader);
-	glAttachShader(shaderprogram, fshader);
-	glLinkProgram(shaderprogram);
-	glDeleteShader(vshader);
-	glDeleteShader(fshader);
+	Shader shader(vss, fss);
+	Material mat(shader);
 
 	GLuint VAO;
 	glGenVertexArrays(1, &VAO);
@@ -111,8 +109,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//用指定的shader program 绘制绑定的VAO
-		glUseProgram(shaderprogram);
 		glBindVertexArray(VAO);
+		mat.Use();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
