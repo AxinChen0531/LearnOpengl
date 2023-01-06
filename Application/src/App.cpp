@@ -1,13 +1,11 @@
-#include <iostream>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "Log.h"
 #include "Shader.h"
 #include "Material.h"
-
-using namespace std;
+#include "Mesh.h"
+#include "Renderer.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -55,10 +53,10 @@ int main()
 	glPolygonMode(GL_BACK, GL_LINE);
 
 	GLfloat vertices[] = {
-		 0.5f,  0.5f, 0.0f,   // 右上角
-		 0.5f, -0.5f, 0.0f,  // 右下角
-		-0.5f, -0.5f, 0.0f, // 左下角
-		-0.5f,  0.5f, 0.0f   // 左上角
+		 0.5f,  0.5f, 0.0f,  0,0,0,  0,0, // 右上角
+		 0.5f, -0.5f, 0.0f,  0,0,0,  0,0,// 右下角
+		-0.5f, -0.5f, 0.0f,  0,0,0,  0,0,// 左下角
+		-0.5f,  0.5f, 0.0f,  0,0,0,  0,0// 左上角
 	};
 	GLuint indices[] = {
 		0, 1, 3, // 第一个三角形（右上）, 顺时针背对
@@ -82,24 +80,8 @@ int main()
 
 	Shader shader(vss, fss);
 	Material mat(shader);
-
-	GLuint VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-	GLuint VBO;
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)(0 * sizeof(GL_FLOAT)));
-	glEnableVertexAttribArray(0);
-	GLuint EBO;
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	//解绑
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	Mesh mesh(vertices, 32, indices, 6);
+	Renderer renderer(&mesh, &mat);
 
 	//rendering circle
 	while (!glfwWindowShouldClose(window)) {
@@ -108,11 +90,7 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//用指定的shader program 绘制绑定的VAO
-		glBindVertexArray(VAO);
-		mat.Use();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+		renderer.Rendering();
 
 		glfwSwapBuffers(window);
 	}

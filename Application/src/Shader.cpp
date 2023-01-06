@@ -38,7 +38,7 @@ Shader::~Shader()
 	glDeleteShader(m_fsid);
 }
 
-void Shader::GetShaderID(unsigned int* vertid, unsigned int* fragid) const
+void Shader::GetID(unsigned int* vertid, unsigned int* fragid) const
 {
 	*vertid = m_vsid;
 	*fragid = m_fsid;

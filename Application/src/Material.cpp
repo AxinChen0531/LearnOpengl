@@ -1,10 +1,11 @@
 #include "Material.h"
+#include <GL/glew.h>
 
 Material::Material(const Shader& shader)
 {
 	m_id = glCreateProgram();
 	unsigned int vsid = 0, fsid = 0;
-	shader.GetShaderID(&vsid, &fsid);
+	shader.GetID(&vsid, &fsid);
 	glAttachShader(m_id, vsid);
 	glAttachShader(m_id, fsid);
 	glLinkProgram(m_id);
@@ -24,7 +25,7 @@ Material::~Material()
 	glDeleteProgram(m_id);
 }
 
-unsigned int Material::GetProgramID() const
+unsigned int Material::GetID() const
 {
 	return m_id;
 }
@@ -32,4 +33,9 @@ unsigned int Material::GetProgramID() const
 void Material::Use() const
 {
 	glUseProgram(m_id);
+}
+
+void Material::Unuse() const
+{
+	glUseProgram(0);
 }

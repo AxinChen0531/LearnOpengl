@@ -10,5 +10,5 @@ public:
 	Shader(const char* vertexShader, const char* fragmentShader);
 	~Shader();
 
-	void GetShaderID(unsigned int* vertid, unsigned int* fragid) const;
+	void GetID(unsigned int* vertid, unsigned int* fragid) const;
 };

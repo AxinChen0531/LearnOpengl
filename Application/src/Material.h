@@ -4,8 +4,6 @@
 #include "Log.h"
 #include <memory>
 
-#include <GL/glew.h>
-
 class Material
 {
 private:
@@ -15,6 +13,7 @@ public:
 	Material(const Shader& shader);
 	~Material();
 
-	unsigned int GetProgramID() const;
+	unsigned int GetID() const;
 	void Use() const;
+	void Unuse() const;
 };
