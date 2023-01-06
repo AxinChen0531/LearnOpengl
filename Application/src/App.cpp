@@ -53,32 +53,18 @@ int main()
 	glPolygonMode(GL_BACK, GL_LINE);
 
 	GLfloat vertices[] = {
-		 0.5f,  0.5f, 0.0f,  0,0,0,  0,0, // 右上角
-		 0.5f, -0.5f, 0.0f,  0,0,0,  0,0,// 右下角
+		//pos				 normal  uv
+		 0.5f,  0.5f, 0.0f,  0,0,0,  1,1, // 右上角
+		 0.5f, -0.5f, 0.0f,  0,0,0,  1,0,// 右下角
 		-0.5f, -0.5f, 0.0f,  0,0,0,  0,0,// 左下角
-		-0.5f,  0.5f, 0.0f,  0,0,0,  0,0// 左上角
+		-0.5f,  0.5f, 0.0f,  0,0,0,  0,1// 左上角
 	};
 	GLuint indices[] = {
 		0, 1, 3, // 第一个三角形（右上）, 顺时针背对
 		3, 2, 1  // 第二个三角形（左下），逆时针正对
 	};
 
-	const char* vss =
-		"#version 330 core\n"
-		"layout(location = 0) in vec3 position;\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = vec4(position.x, position.y, position.z, 1.0);\n"
-		"}";
-	const char* fss =
-		"#version 330 core\n"
-		"out vec4 color;\n"
-		"void main()\n"
-		"{\n"
-		"	color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-		"}";
-
-	Shader shader(vss, fss);
+	Shader shader("./res/Shader/SampleShader.shader");
 	Material mat(shader);
 	Mesh mesh(vertices, 32, indices, 6);
 	Renderer renderer(&mesh, &mat);
@@ -90,7 +76,7 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		renderer.Rendering();
+		renderer.Render();
 
 		glfwSwapBuffers(window);
 	}

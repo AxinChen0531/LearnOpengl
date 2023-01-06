@@ -11,5 +11,5 @@ public:
 	Renderer(Mesh* mesh, Material* mat);
 	~Renderer();
 
-	void Rendering() const;
+	void Render() const;
 };

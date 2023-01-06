@@ -9,7 +9,7 @@ Renderer::~Renderer()
 {
 }
 
-void Renderer::Rendering() const
+void Renderer::Render() const
 {
 	m_mesh->Use();
 	m_mat->Use();

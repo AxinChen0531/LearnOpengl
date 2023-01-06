@@ -1,10 +1,14 @@
+#include <fstream>
+#include <sstream>
+#include <string>
+
 #include "Shader.h"
 #include <memory>
 #include "Log.h"
 
 #include <GL/glew.h>
 
-Shader::Shader(const char* vertexShader, const char* fragmentShader)
+void Shader::CompileShader(const char* vertexShader, const char* fragmentShader)
 {
 	int compileStatus;
 	m_vsid = glCreateShader(GL_VERTEX_SHADER);
@@ -30,6 +34,30 @@ Shader::Shader(const char* vertexShader, const char* fragmentShader)
 		glGetShaderInfoLog(m_fsid, len, &len, msg);
 		Log::Error(msg, "ShaderCompileError");
 	}
+}
+
+Shader::Shader(const char* vertexShader, const char* fragmentShader)
+{
+	CompileShader(vertexShader, fragmentShader);
+}
+
+Shader::Shader(const char* shaderfilePath)
+{
+	std::stringstream ss[2];
+	std::ifstream stream(shaderfilePath);
+	std::string line;
+	int index = 0;
+	if (stream.fail()) 
+		Log::Error("Shader file not found", "PathERR");
+	while (std::getline(stream, line)) {
+		if (line.find("#Vertex") != std::string::npos)
+			index = 0;
+		else if (line.find("#Fragment") != std::string::npos)
+			index = 1;
+		else
+			ss[index] << line << std::endl;
+	}
+	CompileShader(ss[0].str().c_str(), ss[1].str().c_str());
 }
 
 Shader::~Shader()
