@@ -33,6 +33,9 @@
     <ClCompile Include="src\Renderer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\Texture2D.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -50,8 +53,8 @@
     <ClInclude Include="src\Renderer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\Shader\SampleShader.shader" />
+    <ClInclude Include="src\Texture2D.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

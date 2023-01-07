@@ -1,5 +1,4 @@
 #include "Mesh.h"
-#include <GL/glew.h>
 
 Mesh::Mesh(float* vertices, int vcount, unsigned int* indices, int icount) : m_icount(icount)
 {
@@ -32,24 +31,4 @@ Mesh::~Mesh()
 	glDeleteVertexArrays(1, &vao);
 	glDeleteBuffers(1, &vbo);
 	glDeleteBuffers(1, &ebo);
-}
-
-unsigned int Mesh::GetID() const
-{
-	return vao;
-}
-
-int Mesh::GetDrawCount() const
-{
-	return m_icount;
-}
-
-void Mesh::Use() const
-{
-	glBindVertexArray(vao);
-}
-
-void Mesh::Unuse() const
-{
-	glBindVertexArray(0);
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include <GL/glew.h>
 
 class Mesh
 {
@@ -12,8 +13,20 @@ public:
 	Mesh(float* vertices, int vcount, unsigned int* indices, int icount);
 	~Mesh();
 
-	unsigned int GetID() const;
-	int GetDrawCount() const;
-	void Use() const;
-	void Unuse() const;
+	inline unsigned int GetID() const
+	{
+		return vao;
+	}
+	inline int GetDrawCount() const
+	{
+		return m_icount;
+	}
+	inline void Use() const
+	{
+		glBindVertexArray(vao);
+	}
+	inline void Unuse() const
+	{
+		glBindVertexArray(0);
+	}
 };

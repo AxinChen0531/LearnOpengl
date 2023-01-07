@@ -20,7 +20,7 @@ void Shader::CompileShader(const char* vertexShader, const char* fragmentShader)
 		glGetShaderiv(m_vsid, GL_INFO_LOG_LENGTH, &len);
 		char* msg = (char*)alloca(len * sizeof(char));
 		glGetShaderInfoLog(m_vsid, len, &len, msg);
-		Log::Error(msg, "ShaderCompileError");
+		Log::Error(msg, "ShaderCompileERR");
 	}
 
 	m_fsid = glCreateShader(GL_FRAGMENT_SHADER);
@@ -32,7 +32,7 @@ void Shader::CompileShader(const char* vertexShader, const char* fragmentShader)
 		glGetShaderiv(m_fsid, GL_INFO_LOG_LENGTH, &len);
 		char* msg = (char*)alloca(len * sizeof(char));
 		glGetShaderInfoLog(m_fsid, len, &len, msg);
-		Log::Error(msg, "ShaderCompileError");
+		Log::Error(msg, "ShaderCompileERR");
 	}
 }
 

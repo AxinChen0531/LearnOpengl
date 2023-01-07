@@ -1,7 +1,8 @@
 #include "Material.h"
-#include <GL/glew.h>
 
-Material::Material(const Shader& shader)
+Material::Material(const Shader& shader) : m_needBlend(true), m_needZTest(true), m_needZWrite(true), 
+										   m_srcfactor(BlendParam::SRC_ALPHA), m_dstfactor(BlendParam::ONE_MINUS_SRC_ALPHA), 
+										   m_zTestCondition(ZTestCondition::LESS)
 {
 	m_id = glCreateProgram();
 	unsigned int vsid = 0, fsid = 0;
@@ -16,7 +17,7 @@ Material::Material(const Shader& shader)
 		glGetProgramiv(m_id, GL_INFO_LOG_LENGTH, &len);
 		char* msg = (char*)alloca(len * sizeof(char));
 		glGetProgramInfoLog(m_id, len, &len, msg);
-		Log::Error(msg, "ShaderProgramLinkError");
+		Log::Error(msg, "ShaderProgramLinkERR");
 	}
 }
 
@@ -25,17 +26,20 @@ Material::~Material()
 	glDeleteProgram(m_id);
 }
 
-unsigned int Material::GetID() const
-{
-	return m_id;
-}
-
 void Material::Use() const
 {
-	glUseProgram(m_id);
-}
+	if (m_needBlend) {
+		glEnable(GL_BLEND);
+		glBlendFunc(m_srcfactor, m_dstfactor);
+	} else 
+		glDisable(GL_BLEND);
 
-void Material::Unuse() const
-{
-	glUseProgram(0);
+	if (m_needZTest) {
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(m_zTestCondition);
+	} else 
+		glDisable(GL_DEPTH_TEST);
+
+	m_needZWrite ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);
+	glUseProgram(m_id);
 }

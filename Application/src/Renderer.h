@@ -7,6 +7,7 @@ class Renderer
 private:
 	Mesh* m_mesh;
 	Material* m_mat;
+
 public:
 	Renderer(Mesh* mesh, Material* mat);
 	~Renderer();
