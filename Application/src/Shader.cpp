@@ -1,9 +1,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <memory>
 
 #include "Shader.h"
-#include <memory>
 #include "Log.h"
 
 #include <GL/glew.h>

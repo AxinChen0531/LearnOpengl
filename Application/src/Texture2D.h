@@ -23,7 +23,7 @@ enum ImageFilter
 	NEAREST = GL_NEAREST,
 };
 
-class Texture2D
+class Texture2D final
 {
 private:
 	unsigned int m_id;
@@ -63,27 +63,12 @@ public:
 	}
 	inline void Unuse() const
 	{
-		glBindTexture(GL_TEXTURE_2D, m_id);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	inline void SetHorizontalWarpingMode(const ImageWarpingMode mode)
-	{
-		m_horWarping = mode;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_horWarping);
-	}
-	inline void SetVerticalWarpingMode(const ImageWarpingMode mode)
-	{
-		m_verWarping = mode;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_verWarping);
-	}
-	inline void SetMinFilter(const ImageFilter filter)
-	{
-		m_minfilter = filter;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minfilter);
-	}
-	inline void SetMagFilter(const ImageFilter filter)
-	{
-		m_magfilter = filter;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_magfilter);
-	}
+	void SetHorizontalWarpingMode(ImageWarpingMode mode);
+	void SetVerticalWarpingMode(ImageWarpingMode mode);
+	void SetMinFilter(ImageFilter filter);
+	void SetMagFilter(ImageFilter filter);
+
 };

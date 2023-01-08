@@ -37,3 +37,35 @@ Texture2D::~Texture2D()
 {
 	glDeleteTextures(1, &m_id);
 }
+
+void Texture2D::SetHorizontalWarpingMode(ImageWarpingMode mode)
+{
+	m_horWarping = mode;
+	Use();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_horWarping);
+	Unuse();
+}
+
+void Texture2D::SetVerticalWarpingMode(ImageWarpingMode mode)
+{
+	m_verWarping = mode;
+	Use();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_verWarping);
+	Unuse();
+}
+
+void Texture2D::SetMinFilter(ImageFilter filter)
+{
+	m_minfilter = filter;
+	Use();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minfilter);
+	Unuse();
+}
+
+void Texture2D::SetMagFilter(ImageFilter filter)
+{
+	m_magfilter = filter;
+	Use();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_magfilter);
+	Unuse();
+}

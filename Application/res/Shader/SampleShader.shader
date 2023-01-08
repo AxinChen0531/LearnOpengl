@@ -17,10 +17,12 @@ void main()
 in vec2 uv;
 
 uniform sampler2D MainTexture;
+uniform sampler2D Overlap;
 
 out vec4 color;
 void main()
 {
-	//color = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-	color = texture(MainTexture, uv);
+	vec4 base = texture(MainTexture, uv);
+	vec4 over = texture(Overlap, uv);
+	color = mix(base, over, 0.2);
 }

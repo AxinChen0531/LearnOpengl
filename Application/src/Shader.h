@@ -1,6 +1,6 @@
 #pragma once
 
-class Shader
+class Shader final
 {
 private:
 	unsigned int m_vsid;

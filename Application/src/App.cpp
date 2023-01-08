@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -57,24 +58,27 @@ int main()
 
 	GLfloat vertices[] = {
 		//pos				 normal			    uv
-		 0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 0.0f,  1.0f,1.0f,	// 右上角
-		 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 0.0f,  1.0f,0.0f,	// 右下角
+		 0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 0.0f,  2.0f,2.0f,	// 右上角
+		 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 0.0f,  2.0f,0.0f,	// 右下角
 		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 0.0f,  0.0f,0.0f,	// 左下角
-		-0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 0.0f,  0.0f,1.0f	// 左上角
+		-0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 0.0f,  0.0f,2.0f	// 左上角
 	};
 	GLuint indices[] = {
-		0, 1, 3, // 第一个三角形（右上）, 顺时针背对
+		0, 1, 3, // 第一个三角形（右上），顺时针背对
 		3, 2, 1  // 第二个三角形（左下），逆时针正对
 	};
 
 	//一般图形库会设计Y反转API，根据需要设定
 	Texture2D::SetYFlip(true);
 
-	Shader shader("./res/Shader/SampleShader.shader");
-	Material mat(shader);
-	Mesh mesh(vertices, 32, indices, 6);
-	Texture2D t2d("./res/Texture/awesomeface.png");
-	Renderer renderer(&mesh, &mat);
+	std::shared_ptr<Mesh> mesh(new Mesh(vertices, 32, indices, 6));
+	std::shared_ptr<Shader> shader(new Shader("./res/Shader/SampleShader.shader"));
+	std::shared_ptr<Material> mat(new Material(shader.get()));
+	std::shared_ptr<Texture2D> t2d_base(new Texture2D("./res/Texture/container.jpg"));
+	std::shared_ptr<Texture2D> t2d_over(new Texture2D("./res/Texture/awesomeface.png"));
+	mat.get()->SetTexture2D("MainTexture", t2d_base);
+	mat.get()->SetTexture2D("Overlap", t2d_over);
+	std::shared_ptr<Renderer> renderer(new Renderer(mesh, mat));
 
 	//rendering circle
 	while (!glfwWindowShouldClose(window)) {
@@ -85,10 +89,7 @@ int main()
 		glDepthMask(GL_TRUE);
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		//glActiveTexture(GL_TEXTURE0);
-		t2d.Use();
-		//glUniform1i(glGetUniformLocation(mat, "MainTexture"), 0);
-		renderer.Render();
+		renderer->Render();
 
 		glfwSwapBuffers(window);
 	}

@@ -1,7 +1,7 @@
 #include "Renderer.h"
 #include <GL/glew.h>
 
-Renderer::Renderer(Mesh* mesh, Material* mat) : m_mesh(mesh), m_mat(mat)
+Renderer::Renderer(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat) : m_mesh(mesh), m_mat(mat)
 {
 }
 

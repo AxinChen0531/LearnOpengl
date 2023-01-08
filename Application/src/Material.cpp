@@ -1,12 +1,13 @@
 #include "Material.h"
 
-Material::Material(const Shader& shader) : m_needBlend(true), m_needZTest(true), m_needZWrite(true), 
+Material::Material(const Shader* shader) : m_needBlend(true), m_needZTest(true), m_needZWrite(true), 
 										   m_srcfactor(BlendParam::SRC_ALPHA), m_dstfactor(BlendParam::ONE_MINUS_SRC_ALPHA), 
-										   m_zTestCondition(ZTestCondition::LESS)
+										   m_zTestCondition(ZTestCondition::LESS), 
+										   m_texSlotOccupied(0)
 {
 	m_id = glCreateProgram();
 	unsigned int vsid = 0, fsid = 0;
-	shader.GetID(&vsid, &fsid);
+	shader->GetID(&vsid, &fsid);
 	glAttachShader(m_id, vsid);
 	glAttachShader(m_id, fsid);
 	glLinkProgram(m_id);
@@ -41,5 +42,74 @@ void Material::Use() const
 		glDisable(GL_DEPTH_TEST);
 
 	m_needZWrite ? glDepthMask(GL_TRUE) : glDepthMask(GL_FALSE);
+
+	for (auto p : t2ds) {
+		std::shared_ptr<Texture2D> t2d = p.second.second;
+		int slot = p.second.first;
+		if (t2d.use_count()) {
+			glActiveTexture(slot);
+			t2d.get()->Use();
+		}
+	}
 	glUseProgram(m_id);
+}
+
+int Material::GetUniformID(const std::string name)
+{
+	if (uniformMaps.find(name) != uniformMaps.end())
+		return uniformMaps[name];
+	int id = glGetUniformLocation(m_id, name.c_str());
+	if (id != -1) 
+		uniformMaps[name] = id;
+	return id;
+}
+
+float Material::GetFloat(int id) const
+{
+	glUseProgram(m_id);
+	float* p = nullptr;
+	glGetUniformfv(m_id, id, p);
+	glUseProgram(0);
+	return *p;
+}
+
+float* Material::GetVecf(int id) const
+{
+	glUseProgram(m_id);
+	float* p = nullptr;
+	glGetUniformfv(m_id, id, p);
+	glUseProgram(0);
+	return p;
+}
+
+int Material::GetInt(int id) const
+{
+	glUseProgram(m_id);
+	int* p = nullptr;
+	glGetUniformiv(m_id, id, p);
+	glUseProgram(0);
+	return *p;
+}
+
+int* Material::GetVeci(int id) const
+{
+	glUseProgram(m_id);
+	int* p = nullptr;
+	glGetUniformiv(m_id, id, p);
+	glUseProgram(0);
+	return p;
+}
+
+void Material::SetTexture2D(int id, std::shared_ptr<Texture2D> t2d) 
+{
+	if (id == -1)
+		return;
+	if (t2ds.find(id) == t2ds.end()) {
+		int slot = GL_TEXTURE0 + m_texSlotOccupied;
+		SetInt(id, m_texSlotOccupied);
+		t2ds[id] = std::pair<int, std::shared_ptr<Texture2D>>(slot, t2d);
+		m_texSlotOccupied++;
+	} else {
+		t2ds[id].second = t2d;
+	}
 }

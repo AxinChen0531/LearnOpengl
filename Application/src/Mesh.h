@@ -1,8 +1,9 @@
 #pragma once
 #include <unordered_map>
+
 #include <GL/glew.h>
 
-class Mesh
+class Mesh final
 {
 private:
 	unsigned int vao;
