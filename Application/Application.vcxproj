@@ -171,6 +171,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AMath.cpp" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Material.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="src\Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AMath.h" />
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Material.h" />
     <ClInclude Include="src\Mesh.h" />
