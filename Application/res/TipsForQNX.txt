@@ -5,3 +5,4 @@
 1. 窗口创建API 需要抽象出来，windows使用glfw，QNX自写Screen API + EGL
 2. gl库loading方式需要抽象出来，windows使用glew，QNX直接使用SDP提供的库和头文件开发，系统中设置graphic环境
 3. 纹理加载API需要抽象出来，项目使用stb_image，QNX应该无法使用, QNX有自带的image解析库，可以参考文档
+4. 为保证对代码整体的把控，数学库根据自己的需求实现，随版本需求迭代
