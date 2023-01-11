@@ -1,3 +1,10 @@
+/*
+ * Author  : 陈鑫(Axin Chen)
+ * E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+ * Mobil   : (+86)136 4741 2733
+ * Comment : 将 Mesh - Material 的组合渲染单元抽象为Render类
+ */
+
 #pragma once
 #include "Mesh.h"
 #include "Material.h"

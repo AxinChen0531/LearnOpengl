@@ -1,3 +1,10 @@
+/*
+ * Author  : 陈鑫(Axin Chen)
+ * E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+ * Mobil   : (+86)136 4741 2733
+ * Comment : 渲染引擎常用数学库
+ */
+
 #include "AMath.h"
 
 const float Mathf::PI = acosf(-1.0f);
@@ -214,6 +221,15 @@ Vec2 Matrix2x2::operator*(const Vec2 vec) const
 	return res;
 }
 
+Matrix2x2 Matrix2x2::Trans() const
+{
+	Matrix2x2 res = Matrix2x2();
+	for (int i = 0; i < 2; i++)
+		for (int j = 0; j < 2; j++)
+			res[i][j] = m_p[j][i];
+	return res;
+}
+
 Matrix3x3::Matrix3x3()
 {
 	memset(m_p, 0, sizeof(m_p));
@@ -289,6 +305,15 @@ Vec3 Matrix3x3::operator*(const Vec3& vec) const
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			res[i] += m_p[i][j] * vec[j];
+	return res;
+}
+
+Matrix3x3 Matrix3x3::Trans() const
+{
+	Matrix3x3 res = Matrix3x3();
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			res[i][j] = m_p[j][i];
 	return res;
 }
 
@@ -378,5 +403,14 @@ Vec4 Matrix4x4::operator*(const Vec4& vec) const
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 4; j++)
 			res[i] += m_p[i][j] * vec[j];
+	return res;
+}
+
+Matrix4x4 Matrix4x4::Trans() const
+{
+	Matrix4x4 res = Matrix4x4();
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			res[i][j] = m_p[j][i];
 	return res;
 }

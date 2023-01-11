@@ -1,3 +1,10 @@
+/*
+ * Author  : 陈鑫(Axin Chen)
+ * E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+ * Mobil   : (+86)136 4741 2733
+ * Comment : 抽象shader类，对显存中的shader代码段进行管理
+ */
+
 #include <fstream>
 #include <sstream>
 #include <string>

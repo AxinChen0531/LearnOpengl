@@ -1,3 +1,10 @@
+/*
+ * Author  : 陈鑫(Axin Chen)
+ * E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+ * Mobil   : (+86)136 4741 2733
+ * Comment : 将 VAO - (VBO, EBO) 抽象为Mesh类
+ */
+
 #pragma once
 #include <unordered_map>
 

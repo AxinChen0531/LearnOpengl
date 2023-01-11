@@ -1,3 +1,10 @@
+/*
+ * Author  : 陈鑫(Axin Chen)
+ * E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+ * Mobil   : (+86)136 4741 2733
+ * Comment : 抽象Texture2D类，对显存中的纹理数据进行管理
+ */
+
 #pragma once
 
 #include <GL/glew.h>

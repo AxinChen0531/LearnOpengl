@@ -1,3 +1,10 @@
+/*
+ * Author  : 陈鑫(Axin Chen)
+ * E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+ * Mobil   : (+86)136 4741 2733
+ * Comment : 将shader program实例抽象为Material类
+ */
+
 #pragma once
 
 #include <memory>
@@ -67,7 +74,7 @@ private:
 
 	std::unordered_map<std::string, unsigned int> uniformMaps;					//uniform参数位置id缓存
 	int m_texSlotOccupied;														//纹理插槽使用数记录，gl能保证至少支持16个
-	std::unordered_map<int, std::pair<int, std::shared_ptr<Texture2D>>> t2ds;	//使用的纹理对象及位置缓存
+	std::unordered_map<int, std::pair<int, std::shared_ptr<Texture2D>>> t2ds;	//使用的纹理对象及位置缓存 location - (slot - t2d)
 
 public:
 	/// <summary>
@@ -115,6 +122,7 @@ public:
 	/// </summary>
 	/// <param name="name">uniform变量名称</param>
 	int GetUniformID(const std::string name);
+
 
 	inline void SetFloat(int id, float value) const {
 		glUseProgram(m_id);
@@ -202,30 +210,64 @@ public:
 		SetTexture2D(GetUniformID(name), t2d);
 	}
 
+	/// <summary>
+	/// 启用混合
+	/// </summary>
 	inline void EnableBlend() {
 		m_needBlend = true;
 	}
+
+	/// <summary>
+	/// 禁用混合
+	/// </summary>
 	inline void DisableBlend() {
 		m_needBlend = false;
 	}
+
+	/// <summary>
+	/// 启用混合并设置混合参数
+	/// </summary>
+	/// <param name="srcf"></param>
+	/// <param name="dstf"></param>
 	inline void SetBlendParam(const BlendParam srcf, const BlendParam dstf) {
 		m_srcfactor = srcf;
 		m_dstfactor = dstf;
 		m_needBlend = true;
 	}
+
+	/// <summary>
+	/// 启用深度测试
+	/// </summary>
 	inline void EnableZTest() {
 		m_needZTest = true;
 	}
+
+	/// <summary>
+	/// 禁用深度测试
+	/// </summary>
 	inline void DisableZTest() {
 		m_needZTest = false;
 	}
+
+	/// <summary>
+	/// 启用深度测试并设定深度测试条件参数
+	/// </summary>
+	/// <param name="condition">深度测试通过条件</param>
 	inline void SetZTestParam(ZTestCondition condition) {
 		m_zTestCondition = condition;
 		m_needZTest = true;
 	}
+
+	/// <summary>
+	/// 启用深度写入
+	/// </summary>
 	inline void EnableZWrite() {
 		m_needZWrite = true;
 	}
+
+	/// <summary>
+	/// 禁用深度写入
+	/// </summary>
 	inline void DisableZWrite() {
 		m_needZWrite = false;
 	}

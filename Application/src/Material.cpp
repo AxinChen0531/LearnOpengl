@@ -1,3 +1,10 @@
+/*
+ * Author  : 陈鑫(Axin Chen)
+ * E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+ * Mobil   : (+86)136 4741 2733
+ * Comment : 将shader program实例抽象为Material类
+ */
+
 #include "Material.h"
 
 Material::Material(const Shader* shader) : m_needBlend(true), m_needZTest(true), m_needZWrite(true), 
