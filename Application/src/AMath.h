@@ -226,6 +226,7 @@ public:
 			m_x * other.m_y - m_y * other.m_x
 		);
 	}
+	Vec3 Lerp(const Vec3& other, float k, bool limit = true) const;
 
 	inline Vec3 operator-() const {
 		return Vec3(-m_x, -m_y, -m_z);
@@ -372,9 +373,9 @@ public:
 		return res;
 	}
 
-	Matrix2x2 operator+(const Matrix2x2 other) const;
-	Matrix2x2 operator-(const Matrix2x2 other) const;
-	Matrix2x2 operator*(const Matrix2x2 other) const;
+	Matrix2x2 operator+(const Matrix2x2& other) const;
+	Matrix2x2 operator-(const Matrix2x2& other) const;
+	Matrix2x2 operator*(const Matrix2x2& other) const;
 	Vec2 operator*(const Vec2 vec) const;
 
 	static Matrix2x2 Zero() {
@@ -406,10 +407,10 @@ public:
 		return res;
 	}
 
-	Matrix3x3 operator+(const Matrix3x3 other) const;
-	Matrix3x3 operator-(const Matrix3x3 other) const;
-	Matrix3x3 operator*(const Matrix3x3 other) const;
-	Vec3 operator*(const Vec3 vec) const;
+	Matrix3x3 operator+(const Matrix3x3& other) const;
+	Matrix3x3 operator-(const Matrix3x3& other) const;
+	Matrix3x3 operator*(const Matrix3x3& other) const;
+	Vec3 operator*(const Vec3& vec) const;
 
 	static Matrix3x3 Zero() {
 		return Matrix3x3();
@@ -440,16 +441,16 @@ public:
 		return res;
 	}
 
-	Matrix4x4 operator+(const Matrix4x4 other) const;
-	Matrix4x4 operator-(const Matrix4x4 other) const;
-	Matrix4x4 operator*(const Matrix4x4 other) const;
-	Vec4 operator*(const Vec4 vec) const;
+	Matrix4x4 operator+(const Matrix4x4& other) const;
+	Matrix4x4 operator-(const Matrix4x4& other) const;
+	Matrix4x4 operator*(const Matrix4x4& other) const;
+	Vec4 operator*(const Vec4& vec) const;
 
 	static Matrix4x4 Zero() {
 		return Matrix4x4();
 	}
 	static Matrix4x4 One() {
-		Matrix4x4 res;
+		Matrix4x4 res = Matrix4x4();
 		res[3][3] = res[2][2] = res[1][1] = res[0][0] = 1;
 		return res;
 	}

@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(float* vertices, int vcount, unsigned int* indices, int icount) : m_icount(icount)
+Mesh::Mesh(float* vertices, int vsize, unsigned int* indices, int icount) : m_icount(icount)
 {
 	//绑定，数据复制到显存
 	glGenVertexArrays(1, &vao);
@@ -9,7 +9,7 @@ Mesh::Mesh(float* vertices, int vcount, unsigned int* indices, int icount) : m_i
 	glGenBuffers(1, &ebo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ARRAY_BUFFER, vcount * sizeof(float), vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vsize * sizeof(float), vertices, GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, icount * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 	
 	//默认传参 位置 法线 uv

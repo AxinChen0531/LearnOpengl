@@ -1,6 +1,6 @@
 #include <iostream>
 #include <memory>
-
+#include <chrono>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -10,6 +10,7 @@
 #include "Mesh.h"
 #include "Renderer.h"
 #include "Texture2D.h"
+#include "AMath.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {

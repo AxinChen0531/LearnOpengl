@@ -7,7 +7,7 @@ const float Mathf::Rad2Deg = 180.0f / Mathf::PI;
 float Mathf::FPow(float n, int p)
 {
 	if (p < 0)
-		throw "FPow's p should big than 0";
+		throw "FPow's p should bigger than or equal to 0";
 	float t = 1.0f;
 	while (p != 0) {
 		if (p & 1)
@@ -21,7 +21,7 @@ float Mathf::FPow(float n, int p)
 float Mathf::FPow(int n, int p)
 {
 	if (p < 0)
-		throw "FPow's p should big than 0";
+		throw "FPow's p should bigger than or equal to 0";
 	int t = 1;
 	while (p != 0) {
 		if (p & 1)
@@ -78,11 +78,18 @@ Vec2 Vec2::Normalized() const
 		return Vec2::Zero();
 }
 
+Vec2 Vec2::Lerp(const Vec2& other, float k, bool limit) const
+{
+	if (limit)
+		k = Mathf::Saturate(k);
+	return (*this) * k + other * (1 - k);
+}
+
 Vec3::Vec3() : m_x(0), m_y(0), m_z(0)
 {
 }
 
-Vec3::Vec3(float x, float y, float z) : m_x(x), m_y(x), m_z(z)
+Vec3::Vec3(float x, float y, float z) : m_x(x), m_y(y), m_z(z)
 {
 }
 
@@ -107,11 +114,18 @@ Vec3 Vec3::Normalized() const
 		return Vec3::Zero();
 }
 
+Vec3 Vec3::Lerp(const Vec3& other, float k, bool limit) const
+{
+	if (limit)
+		k = Mathf::Saturate(k);
+	return (*this) * k + other * (1 - k);
+}
+
 Vec4::Vec4() : m_x(0), m_y(0), m_z(0), m_w(0)
 {
 }
 
-Vec4::Vec4(float x, float y, float z, float w) : m_x(x), m_y(x), m_z(z), m_w(w)
+Vec4::Vec4(float x, float y, float z, float w) : m_x(x), m_y(y), m_z(z), m_w(w)
 {
 }
 
@@ -151,9 +165,9 @@ Matrix2x2::Matrix2x2(const Matrix4x4& other)
 			m_p[i][j] = other[i][j];
 }
 
-Matrix2x2 Matrix2x2::operator+(const Matrix2x2 other) const
+Matrix2x2 Matrix2x2::operator+(const Matrix2x2& other) const
 {
-	Matrix2x2 res;
+	Matrix2x2 res = Matrix2x2();
 	float* r = (float*)&res;
 	float* a = (float*)(this);
 	float* b = (float*)&other;
@@ -166,9 +180,9 @@ Matrix2x2 Matrix2x2::operator+(const Matrix2x2 other) const
 	return res;
 }
 
-Matrix2x2 Matrix2x2::operator-(const Matrix2x2 other) const
+Matrix2x2 Matrix2x2::operator-(const Matrix2x2& other) const
 {
-	Matrix2x2 res;
+	Matrix2x2 res = Matrix2x2();
 	float* r = (float*)&res;
 	float* a = (float*)(this);
 	float* b = (float*)&other;
@@ -181,9 +195,9 @@ Matrix2x2 Matrix2x2::operator-(const Matrix2x2 other) const
 	return res;
 }
 
-Matrix2x2 Matrix2x2::operator*(const Matrix2x2 other) const
+Matrix2x2 Matrix2x2::operator*(const Matrix2x2& other) const
 {
-	Matrix2x2 res;
+	Matrix2x2 res = Matrix2x2();
 	for (int i = 0; i < 2; i++)
 		for (int j = 0; j < 2; j++)
 			for (int k = 0; k < 2; k++)
@@ -193,7 +207,7 @@ Matrix2x2 Matrix2x2::operator*(const Matrix2x2 other) const
 
 Vec2 Matrix2x2::operator*(const Vec2 vec) const
 {
-	Vec2 res;
+	Vec2 res = Vec2();
 	for (int i = 0; i < 2; i++)
 		for (int j = 0; j < 2; j++)
 			res[i] += m_p[i][j] * vec[j];
@@ -229,9 +243,9 @@ Matrix3x3::Matrix3x3(const Matrix4x4& other)
 			m_p[i][j] = other[i][j];
 }
 
-Matrix3x3 Matrix3x3::operator+(const Matrix3x3 other) const
+Matrix3x3 Matrix3x3::operator+(const Matrix3x3& other) const
 {
-	Matrix3x3 res;
+	Matrix3x3 res = Matrix3x3();
 	float* r = (float*)&res;
 	float* a = (float*)(this);
 	float* b = (float*)&other;
@@ -244,9 +258,9 @@ Matrix3x3 Matrix3x3::operator+(const Matrix3x3 other) const
 	return res;
 }
 
-Matrix3x3 Matrix3x3::operator-(const Matrix3x3 other) const
+Matrix3x3 Matrix3x3::operator-(const Matrix3x3& other) const
 {
-	Matrix3x3 res;
+	Matrix3x3 res = Matrix3x3();
 	float* r = (float*)&res;
 	float* a = (float*)(this);
 	float* b = (float*)&other;
@@ -259,9 +273,9 @@ Matrix3x3 Matrix3x3::operator-(const Matrix3x3 other) const
 	return res;
 }
 
-Matrix3x3 Matrix3x3::operator*(const Matrix3x3 other) const
+Matrix3x3 Matrix3x3::operator*(const Matrix3x3& other) const
 {
-	Matrix3x3 res;
+	Matrix3x3 res = Matrix3x3();
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			for (int k = 0; k < 3; k++)
@@ -269,9 +283,9 @@ Matrix3x3 Matrix3x3::operator*(const Matrix3x3 other) const
 	return res;
 }
 
-Vec3 Matrix3x3::operator*(const Vec3 vec) const
+Vec3 Matrix3x3::operator*(const Vec3& vec) const
 {
-	Vec3 res;
+	Vec3 res = Vec3();
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			res[i] += m_p[i][j] * vec[j];
@@ -318,9 +332,9 @@ Matrix4x4::Matrix4x4(const Matrix4x4& other)
 	memcpy(m_p, &other, sizeof(m_p));
 }
 
-Matrix4x4 Matrix4x4::operator+(const Matrix4x4 other) const
+Matrix4x4 Matrix4x4::operator+(const Matrix4x4& other) const
 {
-	Matrix4x4 res;
+	Matrix4x4 res = Matrix4x4();
 	float* r = (float*)&res;
 	float* a = (float*)(this);
 	float* b = (float*)&other;
@@ -333,9 +347,9 @@ Matrix4x4 Matrix4x4::operator+(const Matrix4x4 other) const
 	return res;
 }
 
-Matrix4x4 Matrix4x4::operator-(const Matrix4x4 other) const
+Matrix4x4 Matrix4x4::operator-(const Matrix4x4& other) const
 {
-	Matrix4x4 res;
+	Matrix4x4 res = Matrix4x4();
 	float* r = (float*)&res;
 	float* a = (float*)(this);
 	float* b = (float*)&other;
@@ -348,9 +362,9 @@ Matrix4x4 Matrix4x4::operator-(const Matrix4x4 other) const
 	return res;
 }
 
-Matrix4x4 Matrix4x4::operator*(const Matrix4x4 other) const
+Matrix4x4 Matrix4x4::operator*(const Matrix4x4& other) const
 {
-	Matrix4x4 res;
+	Matrix4x4 res = Matrix4x4();
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 4; j++)
 			for (int k = 0; k < 4; k++)
@@ -358,9 +372,9 @@ Matrix4x4 Matrix4x4::operator*(const Matrix4x4 other) const
 	return res;
 }
 
-Vec4 Matrix4x4::operator*(const Vec4 vec) const
+Vec4 Matrix4x4::operator*(const Vec4& vec) const
 {
-	Vec4 res;
+	Vec4 res = Vec4();
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 4; j++)
 			res[i] += m_p[i][j] * vec[j];
