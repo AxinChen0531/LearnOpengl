@@ -146,5 +146,4 @@ public:
 	/// </summary>
 	/// <param name="filter">ȡɫģʽ</param>
 	void SetMagFilter(ImageFilter filter);
-
 };

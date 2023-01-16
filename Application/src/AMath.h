@@ -9,6 +9,15 @@
 #include <cmath>
 #include <memory>
 
+class Mathf;
+class Vec2;
+class Vec3;
+class Vec4;
+class Matrix2x2;
+class Matrix3x3;
+class Matrix4x4;
+class Quaternion;
+
 class Mathf final
 {
 public:
@@ -192,13 +201,6 @@ public:
 		return atan2f(y, x);
 	}
 };
-
-class Vec2;
-class Vec3;
-class Vec4;
-class Matrix2x2;
-class Matrix3x3;
-class Matrix4x4;
 
 /// <summary>
 /// 2D向量, 高维向量可隐式转换为低维向量，因此请注意向量数学计算
