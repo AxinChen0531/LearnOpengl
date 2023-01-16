@@ -1,7 +1,7 @@
 /*
  * Author  : 陈鑫(Axin Chen)
  * E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
- * Mobil   : (+86)136 4741 2733
+ * Mobile  : (+86)136 4741 2733
  * Comment : 渲染引擎常用数学库
  */
 
@@ -180,6 +180,16 @@ public:
 	/// <returns>角度(弧度)</returns>
 	static inline float Atan(float num) {
 		return atanf(num);
+	}
+
+	/// <summary>
+	/// 求(x, y)向量与x正向夹角
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="y"></param>
+	/// <returns></returns>
+	static inline float Atan2(float x, float y) {
+		return atan2f(y, x);
 	}
 };
 
@@ -775,8 +785,103 @@ public:
 		return Matrix4x4();
 	}
 	static Matrix4x4 One() {
-		Matrix4x4 res = Matrix4x4();
+		Matrix4x4 res;
 		res[3][3] = res[2][2] = res[1][1] = res[0][0] = 1;
 		return res;
+	}
+};
+
+/// <summary>
+/// 表示旋转的四元数，这里统一只能得到单位四元数，表方向
+/// </summary>
+class Quaternion final
+{
+private:
+	float m_w, m_x, m_y, m_z;
+public:
+	/// <summary>
+	/// 默认单位四元数
+	/// </summary>
+	Quaternion();
+	Quaternion(float x, float y, float z, float w);
+	Quaternion(const Quaternion& other);
+
+	/// <summary>
+	/// 从欧拉角(Degree)转到四元数
+	/// </summary>
+	/// <param name="euler"></param>
+	explicit Quaternion(const Vec3& euler);
+
+	/// <summary>
+	/// 从旋转矩阵转到四元数
+	/// </summary>
+	/// <param name="matrix"></param>
+	explicit Quaternion(const Matrix3x3& matrix);
+
+	/// <summary>
+	/// 四元数转欧拉角
+	/// </summary>
+	/// <returns></returns>
+	Vec3 ToEuler() const;
+
+	/// <summary>
+	/// 四元数转旋转矩阵
+	/// </summary>
+	/// <returns></returns>
+	Matrix3x3 ToMatrix() const;
+
+	/// <summary>
+	/// 单位化，用于避免累积误差
+	/// 四元数类默认所有值模长1，因此当可能出现误差时，请手动调用此函数
+	/// </summary>
+	void Normalize();
+
+	/// <summary>
+	/// 旋转量均匀差值
+	/// </summary>
+	/// <param name="to">作为目的旋转量</param>
+	/// <param name="k">插值系数</param>
+	/// <param name="limit">是否将系数限制到0-1</param>
+	/// <returns>插值结果</returns>
+	Quaternion Slerp(const Quaternion& to, float k, bool limit = true) const;
+
+	/// <summary>
+	/// 取相反旋转量
+	/// </summary>
+	/// <returns></returns>
+	inline Quaternion operator-() const {
+		return Quaternion(m_x, m_y, m_z, -m_w);
+	}
+
+	/// <summary>
+	/// 两旋转叠加，先转乘数，再旋转被乘数
+	/// </summary>
+	/// <param name="other"></param>
+	/// <returns></returns>
+	inline Quaternion operator*(const Quaternion& other) const {
+		return Quaternion(
+			m_w * other.m_x + m_x * other.m_w + m_z * other.m_y - m_y * other.m_z,
+			m_w * other.m_y + m_y * other.m_w + m_x * other.m_z - m_z * other.m_x,
+			m_w * other.m_z + m_z * other.m_w + m_y * other.m_x - m_x * other.m_y,
+			m_w * other.m_w - m_x * other.m_x - m_y * other.m_y - m_z * other.m_z
+		);
+	}
+
+	/// <summary>
+	/// 两旋转差值，从减数到被减数
+	/// </summary>
+	/// <param name="other">出发点</param>
+	/// <returns>旋转差值</returns>
+	inline Quaternion operator-(const Quaternion& other) const {
+		return Quaternion(
+			m_w * other.m_x - m_x * other.m_w + m_z * other.m_y - m_y * other.m_z,
+			m_w * other.m_y - m_y * other.m_w + m_x * other.m_z - m_z * other.m_x,
+			m_w * other.m_z - m_z * other.m_w + m_y * other.m_x - m_x * other.m_y,
+			-m_w * other.m_w - m_x * other.m_x - m_y * other.m_y - m_z * other.m_z
+		);
+	}
+
+	static inline Quaternion Identity() {
+		return Quaternion();
 	}
 };
