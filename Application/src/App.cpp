@@ -4,13 +4,14 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "AMath.h"
 #include "Log.h"
 #include "Shader.h"
 #include "Material.h"
 #include "Mesh.h"
 #include "Renderer.h"
 #include "Texture2D.h"
-#include "AMath.h"
+#include "Camera.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {

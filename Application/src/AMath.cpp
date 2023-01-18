@@ -25,7 +25,7 @@ float Mathf::FPow(float n, int p)
 	return t;
 }
 
-float Mathf::FPow(int n, int p)
+int Mathf::FPow(int n, int p)
 {
 	if (p < 0)
 		throw "FPow's p should bigger than or equal to 0";

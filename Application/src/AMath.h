@@ -103,7 +103,7 @@ public:
 	/// <param name="n"></param>
 	/// <param name="p"></param>
 	/// <returns></returns>
-	static float FPow(int n, int p);
+	static int FPow(int n, int p);
 
 	/// <summary>
 	/// ÏÞÖÆnumµÄ·¶Î§
