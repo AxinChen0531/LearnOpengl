@@ -24,7 +24,7 @@ public:
 	/// </summary>
 	/// <param name="mesh">网格对象指针</param>
 	/// <param name="mat">材质对象指针</param>
-	Renderer(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> mat);
+	Renderer(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Material>& mat);
 
 	/// <summary>
 	/// 析构时，将释放管理的网格和材质智能指针

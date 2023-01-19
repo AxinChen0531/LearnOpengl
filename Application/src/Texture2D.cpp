@@ -40,6 +40,20 @@ Texture2D::Texture2D(const char* imgPath) : m_verWarping(ImageWarpingMode::REPEA
 	stbi_image_free(img);
 }
 
+Texture2D::Texture2D(int w, int h) : m_verWarping(ImageWarpingMode::CLAMP), m_horWarping(ImageWarpingMode::CLAMP),
+									 m_minfilter(ImageFilter::LINEAR), m_magfilter(ImageFilter::LINEAR),
+									 m_format(ImageFormat::RGB), m_channelCount(3), m_width(w), m_height(h)
+{
+	glGenTextures(1, &m_id);
+	glBindTexture(GL_TEXTURE_2D, m_id);
+	glTexImage2D(GL_TEXTURE_2D, 0, m_format, w, h, 0, m_format, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_horWarping);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_verWarping);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, m_minfilter);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, m_magfilter);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 Texture2D::~Texture2D()
 {
 	glDeleteTextures(1, &m_id);

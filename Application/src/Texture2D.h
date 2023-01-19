@@ -74,9 +74,24 @@ public:
 	Texture2D(const char* imgPath);
 
 	/// <summary>
+	/// 创建空图，RGB格式，一般给后处理使用
+	/// </summary>
+	/// <param name="w"></param>
+	/// <param name="h"></param>
+	Texture2D(int w, int h);
+
+	/// <summary>
 	/// 析构时，将释放纹理数据显存
 	/// </summary>
 	~Texture2D();
+
+	/// <summary>
+	/// 获取图片显存id
+	/// </summary>
+	/// <returns></returns>
+	inline unsigned int GetID() const {
+		return m_id;
+	}
 
 	/// <summary>
 	/// 获取纹理分辨率(pixels)

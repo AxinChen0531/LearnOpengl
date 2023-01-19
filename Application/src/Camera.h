@@ -1,8 +1,18 @@
+/*
+* Author  : 陈鑫(Axin Chen)
+* E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+* Mobile  : (+86)136 4741 2733
+* Comment : 抽象Camera类，提供视角变换和渲染后处理能力
+*/
+
 #pragma once
 
 #include <GL/glew.h>
 
 #include "AMath.h"
+#include "Screen.h"
+#include "Material.h"
+#include "Log.h"
 
 enum ProjectionType
 {
@@ -23,6 +33,30 @@ private:
 	float m_aspect;						//宽高比
 	float m_farplaneDist;				//远平面距离
 	float m_nearplaneDist;				//近平面距离
+
+
+	/*
+	 * 后处理framebuffer相关
+	 * 默认传参策略和一般模型不同，请注意
+	 */
+	float post_vertex[20] = {
+		//pos					//uv
+		 1.0f,  1.0f,	1.0f,1.0f,	// 右上角
+		 1.0f, -1.0f,	1.0f,0.0f,	// 右下角
+		-1.0f, -1.0f,	0.0f,0.0f,	// 左下角
+		-1.0f,  1.0f,	0.0f,1.0f	// 左上角
+	};
+	unsigned int post_indices[6]  = {
+		3, 1, 0,
+		3, 2, 1
+	};
+	unsigned int fbo;
+	std::shared_ptr<Texture2D> cba;
+	unsigned int rbo;
+	unsigned int vao;
+	unsigned int vbo;
+	unsigned int ebo;
+	std::shared_ptr<Material> post_mat;
 
 public:
 	Camera(ProjectionType pt);
@@ -135,4 +169,25 @@ public:
 	/// <param name="n">近平面距离</param>
 	/// <param name="f">远平面距离</param>
 	void SetNearFarPlaneDist(float n, float f);
+
+	/// <summary>
+	/// 开始参与到渲染，后续截取输出离屏渲染
+	/// </summary>
+	void Begin() const;
+
+	/// <summary>
+	/// 结束离屏渲染
+	/// </summary>
+	void End() const;
+
+	/// <summary>
+	/// 设置后处理材质
+	/// </summary>
+	/// <param name="mat">后处理材质</param>
+	void SetPostProcessingMat(std::shared_ptr<Material>& mat);
+
+	/// <summary>
+	/// 利用给定的材质进行后处理渲染，将离屏buffer渲染出去
+	/// </summary>
+	void PostProcessing() const;
 };

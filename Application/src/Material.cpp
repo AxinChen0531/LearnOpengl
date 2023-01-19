@@ -107,7 +107,7 @@ int* Material::GetVeci(int id) const
 	return p;
 }
 
-void Material::SetTexture2D(int id, std::shared_ptr<Texture2D> t2d) 
+void Material::SetTexture2D(int id, std::shared_ptr<Texture2D>& t2d) 
 {
 	if (id == -1)
 		return;

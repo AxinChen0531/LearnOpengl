@@ -1,4 +1,8 @@
 此项目代码由于开发便利度原因，暂使用Windows操作系统开发，使用opengl 3.3 core 而非 opengl es 2.0 开发
+但所有gl语句均保证支持es2.0 es3.0，主要区别在shader
+
+1. 3D模型材质，默认输入按顺序为 vec3 pos, vec3 normal, vec2 uv
+2. 后处理材质，默认输入按顺序为 vec2 pos, vec2 uv，uniform必须要有sampler2D MainTexture，示例中可以保持基本情况不变，仅改变fragment shader中的业务逻辑
 
 以下记录移植QNX需要做的事：
 

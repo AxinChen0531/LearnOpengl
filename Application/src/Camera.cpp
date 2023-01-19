@@ -1,3 +1,10 @@
+/*
+* Author  : 陈鑫(Axin Chen)
+* E-mail  : axin.chen@raythinktech.com, m13647412733@163.com
+* Mobile  : (+86)136 4741 2733
+* Comment : 抽象Camera类，提供视角变换和渲染后处理能力
+*/
+
 #include "Camera.h"
 
 Camera::Camera(ProjectionType pt)
@@ -21,11 +28,51 @@ Camera::Camera(ProjectionType pt)
 		m_pMat[2][3] = -51.0f / 49.0f;
 		m_pMat[3][3] = 1.0f;
 	}
+
+	post_mat = nullptr;
+	int w = Screen::Instance()->GetWidth();
+	int h = Screen::Instance()->GetHeight();
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glGenBuffers(1, &vbo);
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), post_vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), post_indices, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);										//position vec2
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (const void*)(2 * sizeof(float)));		//uv vec2
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+	cba = std::shared_ptr<Texture2D>(new Texture2D(w, h));
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, cba.get()->GetID(), 0);
+	glGenRenderbuffers(1, &rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		Log::Error("Framebuffer is not complete!", "GL_ERR");
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 Camera::~Camera()
 {
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo);
+	glDeleteBuffers(1, &ebo);
 
+	glDeleteFramebuffers(1, &fbo);
+	cba = nullptr;
+	glDeleteRenderbuffers(1, &rbo);
 }
 
 void Camera::SetProjectionType(ProjectionType pt)
@@ -132,4 +179,33 @@ void Camera::SetNearFarPlaneDist(float n, float f)
 	}
 	m_nearplaneDist = n;
 	m_farplaneDist = f;
+}
+
+void Camera::Begin() const
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	glClearColor(0, 0, 0, 1);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glDepthMask(GL_TRUE);
+	glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void Camera::End() const
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Camera::SetPostProcessingMat(std::shared_ptr<Material>& mat) 
+{
+	post_mat = mat;
+	post_mat.get()->SetTexture2D("MainTexture", cba);
+}
+
+void Camera::PostProcessing() const
+{
+	glBindVertexArray(vao);
+	post_mat.get()->Use();
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	post_mat.get()->Unuse();
 }

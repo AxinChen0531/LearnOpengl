@@ -205,8 +205,8 @@ public:
 		return GetVeci(GetUniformID(name));
 	}
 
-	void SetTexture2D(int id, std::shared_ptr<Texture2D> t2d);
-	inline void SetTexture2D(std::string name, std::shared_ptr<Texture2D> t2d) {
+	void SetTexture2D(int id, std::shared_ptr<Texture2D>& t2d);
+	inline void SetTexture2D(std::string name, std::shared_ptr<Texture2D>& t2d) {
 		SetTexture2D(GetUniformID(name), t2d);
 	}
 
