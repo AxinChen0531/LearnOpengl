@@ -16,3 +16,4 @@
 #include "Texture2D.h"
 #include "Camera.h"
 #include "Screen.h"
+#include "Object.h"

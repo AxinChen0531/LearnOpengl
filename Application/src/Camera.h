@@ -29,7 +29,7 @@ private:
 	Matrix4x4 m_pMat;					//投影矩阵（考虑到透视投影，使用完后要进行齐次化，建议在shader中进行），以摄像机正向为观察空间正向
 	ProjectionType m_projection;		//投影类型
 	float m_fov;						//横向FOV（仅在透视投影情况下有效）
-	float m_width;						//高度（仅在正交投影情况下有效）
+	float m_width;						//宽度（仅在正交投影情况下有效）
 	float m_aspect;						//宽高比
 	float m_farplaneDist;				//远平面距离
 	float m_nearplaneDist;				//近平面距离

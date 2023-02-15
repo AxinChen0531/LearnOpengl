@@ -77,5 +77,8 @@
     <ClInclude Include="src\AxE_Core.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\Object.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
