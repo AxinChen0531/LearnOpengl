@@ -181,6 +181,7 @@
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Material.cpp" />
     <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Screen.cpp" />
     <ClCompile Include="src\Shader.cpp" />

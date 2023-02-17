@@ -18,9 +18,8 @@ class Component;
 class GameObject final
 {
 private:
-	unsigned long long m_id;
+	unsigned int m_indexAsChild;
 	bool m_active;
-	bool needDispose;
 	std::unordered_map<unsigned int, std::shared_ptr<Component>> m_comps;
 
 	bool m_transFlag;
@@ -44,10 +43,11 @@ public:
 	template<typename T>
 	bool RemoveComponent();
 
-	std::weak_ptr<GameObject> GetParent() const;
+	void SetActive(bool active);
+	GameObject& GetParent() const;
 	void SetParent(std::weak_ptr<GameObject> newP);
 	unsigned int GetChildCount() const;
-	std::shared_ptr<GameObject> GetChild(int index) const;
+	GameObject& GetChild(int index) const;
 
 	Vec3 LocalPosition() const;
 	Vec3 Position() const;
@@ -60,6 +60,9 @@ public:
 	void SetLocalScale(const Vec3& newScale);
 	void SetRotation(const Quaternion& newR);
 	void SetLocalRotation(const Quaternion& newR);
+
+private:
+	void Update();
 };
 
 
@@ -67,14 +70,19 @@ public:
 class Component
 {
 private:
+	bool m_enable;
 	std::weak_ptr<GameObject> m_gameObj;
 
 public:
 	Component();
 	~Component();
 
+	GameObject& GameObject() const;
+	void SetEnable(bool enable);
+
 	virtual void Awake();
-	virtual void Start();
+	virtual void OnEnable();
+	virtual void OnDisable();
 	virtual void Update();
 	virtual void OnDestroy();
 };
