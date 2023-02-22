@@ -45,9 +45,6 @@
     <ClCompile Include="src\Screen.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Object.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -78,9 +75,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\AxE_Core.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Object.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
