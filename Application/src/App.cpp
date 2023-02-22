@@ -1,4 +1,12 @@
-#include "AxE_Core.h"
+#include "AMath.h"
+#include "Log.h"
+#include "Shader.h"
+#include "Material.h"
+#include "Mesh.h"
+#include "Renderer.h"
+#include "Texture2D.h"
+#include "Camera.h"
+#include "Screen.h"
 
 int main()
 {

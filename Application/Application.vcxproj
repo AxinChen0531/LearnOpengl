@@ -188,7 +188,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AMath.h" />
-    <ClInclude Include="src\AxE_Core.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Material.h" />
