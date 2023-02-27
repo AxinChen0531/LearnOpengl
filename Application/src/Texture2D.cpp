@@ -5,12 +5,12 @@
  * Comment : 抽象Texture2D类，对显存中的纹理数据进行管理
  */
 
-#include "Texture2D.h"
-#include "Log.h"
-
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #undef STB_IMAGE_IMPLEMENTATION
+
+#include "Texture2D.h"
+#include "Log.h"
 
 void Texture2D::SetYFlip(bool flip)
 {

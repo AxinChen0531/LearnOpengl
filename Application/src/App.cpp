@@ -7,6 +7,7 @@
 #include "Texture2D.h"
 #include "Camera.h"
 #include "Screen.h"
+#include "Object.h"
 
 int main()
 {
@@ -15,7 +16,7 @@ int main()
 	//正面绘制面，背面绘制框
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glPolygonMode(GL_BACK, GL_LINE);
-
+	
 	GLfloat vertices[] = {
 		//pos				 normal			    uv
 		 0.5f,  0.5f, 0.0f,  0.0f, 0.0f, -1.0f,  2.0f,2.0f,	// 右上角
@@ -30,20 +31,20 @@ int main()
 
 	//一般图形库会设计Y反转API，根据需要设定
 	Texture2D::SetYFlip(true);
-
 	std::shared_ptr<Mesh> mesh(new Mesh(vertices, sizeof(vertices), indices, sizeof(indices)/sizeof(unsigned int)));
 	std::shared_ptr<Shader> shader(new Shader("./res/Shader/Sample3DShader.shader"));
 	std::shared_ptr<Material> mat(new Material(shader.get()));
 	std::shared_ptr<Texture2D> t2d_base(new Texture2D("./res/Texture/container.jpg"));
 	std::shared_ptr<Texture2D> t2d_over(new Texture2D("./res/Texture/awesomeface.png"));
 	mat.get()->SetTexture2D("MainTexture", t2d_base);
-	mat.get()->SetTexture2D("Overlap", t2d_over);
-	std::shared_ptr<Renderer> renderer(new Renderer(mesh, mat));
-
+	mat.get()->SetTexture2D("Overlap", t2d_over);	
 	std::shared_ptr<Shader> post_shader(new Shader("./res/Shader/SamplePostProcessing.shader"));
 	std::shared_ptr<Material> post_mat(new Material(post_shader.get()));
-	std::shared_ptr<Camera> cam(new Camera(ProjectionType::Perspective));
-	cam.get()->SetPostProcessingMat(post_mat);
+
+	Entity* Scene = new Entity();
+	Renderer* renderer = Scene->AddComponent<Renderer, std::shared_ptr<Mesh>&, std::shared_ptr<Material>&>(mesh, mat);
+	Camera* cam = Scene->AddComponent<Camera, ProjectionType>(ProjectionType::Perspective);
+	cam->SetPostProcessingMat(post_mat);
 
 	shader = nullptr;
 	post_shader = nullptr;
@@ -52,14 +53,15 @@ int main()
 	while (screen.Continue()) {
 		screen.PollEvents();
 		screen.ClearBuffers();
-
+		//逻辑循环
+		EventCenter::Update();
+		//逻辑结束后进行渲染
 		//离屏渲染
-		cam.get()->Begin();
+		cam->Begin();
 		renderer->Render();
-		cam.get()->End();
-
+		cam->End();
 		//后处理输出结果，此时无离屏渲染截取，因此成为了最终输出
-		cam.get()->PostProcessing();
+		cam->PostProcessing();
 
 		screen.SwapBuffers();
 	}

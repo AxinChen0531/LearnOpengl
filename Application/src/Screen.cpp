@@ -5,7 +5,9 @@
 * Comment : ³éÏóÆÁÄ»Àà
 */
 
+#include "AMath.h"
 #include "Screen.h"
+#include "Log.h"
 
 Screen* Screen::m_Instance = nullptr;
 

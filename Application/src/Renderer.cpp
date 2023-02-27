@@ -5,12 +5,18 @@
  * Comment : 将 Mesh - Material 的组合渲染单元抽象为Render类
  */
 
-
-#include "Renderer.h"
 #include <GL/glew.h>
 
-Renderer::Renderer(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Material>& mat) : m_mesh(mesh), m_mat(mat)
+#include "Renderer.h"
+
+Renderer::Renderer() : m_mesh(nullptr), m_mat(nullptr)
 {
+}
+
+void Renderer::Awake(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Material>& mat)
+{
+	m_mat = mat;
+	m_mesh = mesh;
 }
 
 Renderer::~Renderer()

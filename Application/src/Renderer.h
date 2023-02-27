@@ -6,17 +6,21 @@
  */
 
 #pragma once
-#include "Mesh.h"
-#include "Material.h"
+
 #include <memory>
 
-class Renderer
+#include "Mesh.h"
+#include "Material.h"
+#include "Object.h"
+
+class Renderer : public Component, public IAwake2<std::shared_ptr<Mesh>&, std::shared_ptr<Material>&>
 {
 private:
 	std::shared_ptr<Mesh> m_mesh;		//网格指针
 	std::shared_ptr<Material> m_mat;	//材质指针
 
 public:
+	Renderer();
 	/// <summary>
 	/// 传入的网格和对应材质，作为一个渲染单元
 	/// 请统一对网格和材质管理对象使用智能指针进行管理，避免出现资源为空，渲染错误的情况
@@ -24,12 +28,16 @@ public:
 	/// </summary>
 	/// <param name="mesh">网格对象指针</param>
 	/// <param name="mat">材质对象指针</param>
-	Renderer(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Material>& mat);
+	void Awake(std::shared_ptr<Mesh>& mesh, std::shared_ptr<Material>& mat) override;
 
 	/// <summary>
 	/// 析构时，将释放管理的网格和材质智能指针
 	/// </summary>
 	~Renderer();
+
+	inline const type_info* GetTypeInfo() const override {
+		return &typeid(Renderer);
+	}
 
 	/// <summary>
 	/// 利用管理的网格和材质进行渲染

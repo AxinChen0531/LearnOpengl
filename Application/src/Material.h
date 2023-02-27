@@ -7,15 +7,13 @@
 
 #pragma once
 
+#include <GL/glew.h>
 #include <memory>
 #include <unordered_map>
 #include <string>
 
 #include "Shader.h"
 #include "Texture2D.h"
-#include "Log.h"
-
-#include <GL/glew.h>
 
 /// <summary>
 /// 混合模式参数

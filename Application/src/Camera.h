@@ -8,11 +8,12 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <memory>
 
 #include "AMath.h"
-#include "Screen.h"
 #include "Material.h"
-#include "Log.h"
+#include "Texture2D.h"
+#include "Object.h"
 
 enum ProjectionType
 {
@@ -23,7 +24,7 @@ enum ProjectionType
 /// <summary>
 /// 摄像机类，用于组织渲染，规划投影矩阵
 /// </summary>
-class Camera final
+class Camera final : public Component, public IAwake1<ProjectionType>
 {
 private:
 	Matrix4x4 m_pMat;					//投影矩阵（考虑到透视投影，使用完后要进行齐次化，建议在shader中进行），以摄像机正向为观察空间正向
@@ -59,8 +60,12 @@ private:
 	std::shared_ptr<Material> post_mat;
 
 public:
-	Camera(ProjectionType pt);
-	~Camera();
+	Camera();
+	void Awake(ProjectionType pt) override;
+	~Camera() override;
+	inline const type_info* GetTypeInfo() const override {
+		return &typeid(Camera);
+	}
 
 	/// <summary>
 	/// 设置投影模式

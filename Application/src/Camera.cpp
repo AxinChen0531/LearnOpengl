@@ -6,15 +6,23 @@
 */
 
 #include "Camera.h"
+#include "Screen.h"
+#include "Log.h"
 
-Camera::Camera(ProjectionType pt)
+Camera::Camera()
 {
-	m_projection = pt;
+	m_projection = ProjectionType::Perspective;
 	m_width = 4.0f;
 	m_fov = 0.5f * Mathf::PI;
 	m_aspect = 1.0f;
 	m_nearplaneDist = 1.0f;
 	m_farplaneDist = 50.0f;
+	post_mat = nullptr;
+}
+
+void Camera::Awake(ProjectionType pt)
+{
+	m_projection = pt;
 	if (pt == ProjectionType::Perspective) {
 		m_pMat[0][0] = 1.0f;
 		m_pMat[1][1] = 1.0f;
@@ -29,7 +37,6 @@ Camera::Camera(ProjectionType pt)
 		m_pMat[3][3] = 1.0f;
 	}
 
-	post_mat = nullptr;
 	int w = Screen::Instance()->GetWidth();
 	int h = Screen::Instance()->GetHeight();
 

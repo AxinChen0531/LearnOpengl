@@ -6,8 +6,8 @@
  */
 
 #pragma once
+
 #include <cmath>
-#include <memory>
 
 class Mathf;
 class Vec2;

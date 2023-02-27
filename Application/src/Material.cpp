@@ -6,6 +6,7 @@
  */
 
 #include "Material.h"
+#include "Log.h"
 
 Material::Material(const Shader* shader) : m_needBlend(true), m_needZTest(true), m_needZWrite(true), 
 										   m_srcfactor(BlendParam::SRC_ALPHA), m_dstfactor(BlendParam::ONE_MINUS_SRC_ALPHA), 

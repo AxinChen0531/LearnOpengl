@@ -5,15 +5,12 @@
  * Comment : 抽象shader类，对显存中的shader代码段进行管理
  */
 
+#include <GL/glew.h>
 #include <fstream>
 #include <sstream>
-#include <string>
-#include <memory>
 
 #include "Shader.h"
 #include "Log.h"
-
-#include <GL/glew.h>
 
 void Shader::CompileShader(const char* vertexShader, const char* fragmentShader)
 {

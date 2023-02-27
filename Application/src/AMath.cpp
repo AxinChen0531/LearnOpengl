@@ -5,6 +5,9 @@
  * Comment : 渲染引擎常用数学库
  */
 
+#include <memory>
+#include <exception>
+
 #include "AMath.h"
 
 const float Mathf::PI = acosf(-1.0f);
@@ -14,7 +17,7 @@ const float Mathf::Rad2Deg = 180.0f / Mathf::PI;
 float Mathf::FPow(float n, int p)
 {
 	if (p < 0)
-		throw "FPow's p should bigger than or equal to 0";
+		throw std::exception("FPow's p should bigger than or equal to 0");
 	float t = 1.0f;
 	while (p != 0) {
 		if (p & 1)
@@ -28,7 +31,7 @@ float Mathf::FPow(float n, int p)
 int Mathf::FPow(int n, int p)
 {
 	if (p < 0)
-		throw "FPow's p should bigger than or equal to 0";
+		throw std::exception("FPow's p should bigger than or equal to 0");
 	int t = 1;
 	while (p != 0) {
 		if (p & 1)
