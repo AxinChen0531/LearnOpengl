@@ -27,7 +27,7 @@ enum ProjectionType
 class Camera final : public Component, public IAwake1<ProjectionType>
 {
 private:
-	Matrix4x4 m_pMat;					//投影矩阵（考虑到透视投影，使用完后要进行齐次化，建议在shader中进行），以摄像机正向为观察空间正向
+	Matrix4x4 m_pMat;					//投影矩阵（考虑到透视投影，使用完后要进行齐次化(shader将自动齐次)），以摄像机正向为观察空间正向
 	ProjectionType m_projection;		//投影类型
 	float m_fov;						//横向FOV（仅在透视投影情况下有效）
 	float m_width;						//宽度（仅在正交投影情况下有效）
@@ -40,12 +40,12 @@ private:
 	 * 后处理framebuffer相关
 	 * 默认传参策略和一般模型不同，请注意
 	 */
-	float post_vertex[20] = {
-		//pos					//uv
-		 1.0f,  1.0f,	1.0f,1.0f,	// 右上角
-		 1.0f, -1.0f,	1.0f,0.0f,	// 右下角
-		-1.0f, -1.0f,	0.0f,0.0f,	// 左下角
-		-1.0f,  1.0f,	0.0f,1.0f	// 左上角
+	float post_vertex[16] = {
+		//pos			//uv
+		 1.0f,  1.0f,	1.0f, 1.0f,	// 右上角
+		 1.0f, -1.0f,	1.0f, 0.0f,	// 右下角
+		-1.0f, -1.0f,	0.0f, 0.0f,	// 左下角
+		-1.0f,  1.0f,	0.0f, 1.0f	// 左上角
 	};
 	unsigned int post_indices[6]  = {
 		3, 1, 0,

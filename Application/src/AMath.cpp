@@ -233,6 +233,53 @@ Matrix2x2 Matrix2x2::Trans() const
 	return res;
 }
 
+Matrix2x2 Matrix2x2::Inverse() const
+{
+	Matrix2x2 tmp = *this;
+	Matrix2x2 res = Matrix2x2::One();
+	int n = 2;
+	for (int i = 0; i < n; i++) {
+		int max_row = i;
+		for (int j = i + 1; j < n; j++)
+			if (Mathf::Abs(tmp[j][i]) > Mathf::Abs(tmp[max_row][i]))
+				max_row = j;
+		if (max_row != i) {
+			for (int k = 0; k < n; k++) {
+				float t = tmp[i][k];
+				tmp[i][k] = tmp[max_row][k];
+				tmp[max_row][k] = t;
+				t = res[i][k];
+				res[i][k] = res[max_row][k];
+				res[max_row][k] = t;
+
+			}
+		}
+		float pivot = tmp[i][i];
+		if (pivot == 0.0f) 
+			return Matrix4x4::Zero();
+		for (int j = i + 1; j < n; j++) {
+			float scale = tmp[j][i] / pivot;
+			for (int k = 0; k < n; k++) {
+				tmp[j][k] -= scale * tmp[i][k];
+				res[j][k] -= scale * res[i][k];
+			}
+		}
+	}
+	for (int i = n - 1; i >= 0; i--) {
+		float pivot = tmp[i][i];
+		if (pivot == 0.0f) 
+			return Matrix4x4::Zero();
+		for (int j = 0; j < n; j++) 
+			res[i][j] /= pivot;
+		for (int j = i - 1; j >= 0; j--) {
+			float scale = tmp[j][i] / pivot;
+			for (int k = 0; k < n; k++) 
+				res[j][k] -= scale * res[i][k];
+		}
+	}
+	return res;
+}
+
 Matrix3x3::Matrix3x3()
 {
 	memset(m_p, 0, sizeof(m_p));
@@ -317,6 +364,53 @@ Matrix3x3 Matrix3x3::Trans() const
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			res[i][j] = m_p[j][i];
+	return res;
+}
+
+Matrix3x3 Matrix3x3::Inverse() const
+{
+	Matrix3x3 tmp = *this;
+	Matrix3x3 res = Matrix3x3::One();
+	int n = 3;
+	for (int i = 0; i < n; i++) {
+		int max_row = i;
+		for (int j = i + 1; j < n; j++)
+			if (Mathf::Abs(tmp[j][i]) > Mathf::Abs(tmp[max_row][i]))
+				max_row = j;
+		if (max_row != i) {
+			for (int k = 0; k < n; k++) {
+				float t = tmp[i][k];
+				tmp[i][k] = tmp[max_row][k];
+				tmp[max_row][k] = t;
+				t = res[i][k];
+				res[i][k] = res[max_row][k];
+				res[max_row][k] = t;
+
+			}
+		}
+		float pivot = tmp[i][i];
+		if (pivot == 0.0f) 
+			return Matrix4x4::Zero();
+		for (int j = i + 1; j < n; j++) {
+			float scale = tmp[j][i] / pivot;
+			for (int k = 0; k < n; k++) {
+				tmp[j][k] -= scale * tmp[i][k];
+				res[j][k] -= scale * res[i][k];
+			}
+		}
+	}
+	for (int i = n - 1; i >= 0; i--) {
+		float pivot = tmp[i][i];
+		if (pivot == 0.0f) 
+			return Matrix4x4::Zero();
+		for (int j = 0; j < n; j++) 
+			res[i][j] /= pivot;
+		for (int j = i - 1; j >= 0; j--) {
+			float scale = tmp[j][i] / pivot;
+			for (int k = 0; k < n; k++) 
+				res[j][k] -= scale * res[i][k];
+		}
+	}
 	return res;
 }
 
@@ -415,6 +509,53 @@ Matrix4x4 Matrix4x4::Trans() const
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 4; j++)
 			res[i][j] = m_p[j][i];
+	return res;
+}
+
+Matrix4x4 Matrix4x4::Inverse() const
+{
+	Matrix4x4 tmp = *this;
+	Matrix4x4 res = Matrix4x4::One();
+	int n = 4;
+	for (int i = 0; i < n; i++) {
+		int max_row = i;
+		for (int j = i + 1; j < n; j++)
+			if (Mathf::Abs(tmp[j][i]) > Mathf::Abs(tmp[max_row][i]))
+				max_row = j;
+		if (max_row != i) {
+			for (int k = 0; k < n; k++) {
+				float t = tmp[i][k];
+				tmp[i][k] = tmp[max_row][k];
+				tmp[max_row][k] = t;
+				t = res[i][k];
+				res[i][k] = res[max_row][k];
+				res[max_row][k] = t;
+				
+			}
+		}
+		float pivot = tmp[i][i];
+		if (pivot == 0.0f) 
+			return Matrix4x4::Zero();
+		for (int j = i + 1; j < n; j++) {
+			float scale = tmp[j][i] / pivot;
+			for (int k = 0; k < n; k++) {
+				tmp[j][k] -= scale * tmp[i][k];
+				res[j][k] -= scale * res[i][k];
+			}
+		}
+	}
+	for (int i = n - 1; i >= 0; i--) {
+		float pivot = tmp[i][i];
+		if (pivot == 0.0f) 
+			return Matrix4x4::Zero();
+		for (int j = 0; j < n; j++) 
+			res[i][j] /= pivot;
+		for (int j = i - 1; j >= 0; j--) {
+			float scale = tmp[j][i] / pivot;
+			for (int k = 0; k < n; k++) 
+				res[j][k] -= scale * res[i][k];
+		}
+	}
 	return res;
 }
 

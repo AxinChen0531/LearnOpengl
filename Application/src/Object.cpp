@@ -18,11 +18,6 @@ Component::~Component()
 	m_entity = nullptr;
 }
 
-Entity* Component::GetEntity() const
-{
-	return m_entity;
-}
-
 void Component::Dispose()
 {
 	if (IsDisposed)

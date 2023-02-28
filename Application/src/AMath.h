@@ -671,6 +671,13 @@ public:
 	/// <returns></returns>
 	Matrix2x2 Trans() const;
 
+	/// <summary>
+	/// 获取逆矩阵
+	/// </summary>
+	/// <returns></returns>
+	Matrix2x2 Inverse() const;
+
+
 	static Matrix2x2 Zero() {
 		return Matrix2x2();
 	}
@@ -727,6 +734,12 @@ public:
 	/// <returns></returns>
 	Matrix3x3 Trans() const;
 
+	/// <summary>
+	/// 获取逆矩阵
+	/// </summary>
+	/// <returns></returns>
+	Matrix3x3 Inverse() const;
+
 	static Matrix3x3 Zero() {
 		return Matrix3x3();
 	}
@@ -782,6 +795,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	Matrix4x4 Trans() const;
+
+	/// <summary>
+	/// 获取逆矩阵
+	/// </summary>
+	/// <returns></returns>
+	Matrix4x4 Inverse() const;
 
 	static Matrix4x4 Zero() {
 		return Matrix4x4();

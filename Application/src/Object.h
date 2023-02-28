@@ -78,6 +78,7 @@ class Component : IObject
 	friend Entity;
 private:
 	Entity* m_entity;		//挂载实体
+
 public:
 	Component();
 	virtual ~Component();
@@ -88,50 +89,11 @@ public:
 	/// 获取挂载的实体指针，若无返回nullptr
 	/// </summary>
 	/// <returns></returns>
-	Entity* GetEntity() const;
+	inline Entity* GetEntity() const {
+		return m_entity;
+	}
 	virtual const type_info* GetTypeInfo() const = 0;
 	virtual void Dispose() override;
-};
-
-
-
-/// <summary>
-/// 请使用Object工厂创建临时或根Object
-/// </summary>
-class ObjectFactory
-{
-public:
-	template<typename T>
-	static T* Create() {
-		static_assert(std::is_base_of<Component, T>::value || std::is_base_of<Entity, T>::value, " -- need base on Entity/Component class -- ");
-		T* obj = new T();
-		EventCenter::Awake<T>(obj);
-		return obj;
-	}
-
-	template<typename T, typename A>
-	static T* Create(A a) {
-		static_assert(std::is_base_of<Component, T>::value || std::is_base_of<Entity, T>::value, " -- need base on Entity/Component class -- ");
-		T* obj = new T();
-		EventCenter::Awake<T, A>(obj, a);
-		return obj;
-	}
-
-	template<typename T, typename A, typename B>
-	static T* Create(A a, B b) {
-		static_assert(std::is_base_of<Component, T>::value || std::is_base_of<Entity, T>::value, " -- need base on Entity/Component class -- ");
-		T* obj = new T();
-		EventCenter::Awake<T, A, B>(obj, a, b);
-		return obj;
-	}
-
-	template<typename T, typename A, typename B, typename C>
-	static T* Create(A a, B b, C c) {
-		static_assert(std::is_base_of<Component, T>::value || std::is_base_of<Entity, T>::value, " -- need base on Entity/Component class -- ");
-		T* obj = new T();
-		EventCenter::Awake<T, A, B, C>(obj, a, b, c);
-		return obj;
-	}
 };
 
 
@@ -238,6 +200,50 @@ public:
 
 
 
+/// <summary>
+/// 请使用Object工厂创建临时或根Object
+/// </summary>
+class ObjectFactory
+{
+public:
+	template<typename T>
+	static T* Create() {
+		static_assert(std::is_base_of<Component, T>::value || std::is_base_of<Entity, T>::value, " -- need base on Entity/Component class -- ");
+		T* obj = new T();
+		EventCenter::Awake<T>(obj);
+		return obj;
+	}
+
+	template<typename T, typename A>
+	static T* Create(A a) {
+		static_assert(std::is_base_of<Component, T>::value || std::is_base_of<Entity, T>::value, " -- need base on Entity/Component class -- ");
+		T* obj = new T();
+		EventCenter::Awake<T, A>(obj, a);
+		return obj;
+	}
+
+	template<typename T, typename A, typename B>
+	static T* Create(A a, B b) {
+		static_assert(std::is_base_of<Component, T>::value || std::is_base_of<Entity, T>::value, " -- need base on Entity/Component class -- ");
+		T* obj = new T();
+		EventCenter::Awake<T, A, B>(obj, a, b);
+		return obj;
+	}
+
+	template<typename T, typename A, typename B, typename C>
+	static T* Create(A a, B b, C c) {
+		static_assert(std::is_base_of<Component, T>::value || std::is_base_of<Entity, T>::value, " -- need base on Entity/Component class -- ");
+		T* obj = new T();
+		EventCenter::Awake<T, A, B, C>(obj, a, b, c);
+		return obj;
+	}
+};
+
+
+
+/// <summary>
+/// 用于Object管理和逻辑循环
+/// </summary>
 class EventCenter
 {
 private:
