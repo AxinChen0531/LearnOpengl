@@ -9,7 +9,7 @@
 
 GameObject GameObject::SceneRoot = GameObject();
 
-GameObject::GameObject() : m_indexAsChild(-1), m_Parent(nullptr), updateFlag(true), m_depth(0)
+GameObject::GameObject() : m_indexAsChild(-1), m_Parent(nullptr), m_updateFlag(false), m_depth(0)
 {
 	m_uid = cid++;
 }
@@ -97,17 +97,26 @@ bool GameObject::MakeIndep(GameObject* child)
 	return false;
 }
 
-void GameObject::UpdateDepth(int depth)
+void GameObject::ResetDepth(int depth)
 {
 	m_depth = depth;
 	depth++;
 	for (GameObject* p : m_children)
-		UpdateDepth(depth);
+		ResetDepth(depth);
+}
+
+void GameObject::ResetFlags()
+{
+	if (ResetFlags)
+		return;
+	m_updateFlag = true;
+	for (GameObject* p : m_children)
+		ResetFlags();
 }
 
 void GameObject::SetParentWithoutJudge(GameObject* newParent)
 {
-	updateFlag = true;
+	ResetFlags();
 	if (m_Parent) {
 		m_Parent->m_children.back()->m_indexAsChild = m_indexAsChild;
 		m_Parent->m_children[m_indexAsChild] = m_children.back();
@@ -115,6 +124,6 @@ void GameObject::SetParentWithoutJudge(GameObject* newParent)
 	}
 	m_Parent = newParent;
 	m_indexAsChild = newParent->m_children.size();
-	UpdateDepth(newParent->m_depth + 1);
+	ResetDepth(newParent->m_depth + 1);
 	newParent->m_children.push_back(this);
 }
