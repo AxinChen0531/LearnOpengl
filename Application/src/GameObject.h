@@ -33,7 +33,7 @@ private:
 	int m_indexAsChild;							//当前物体为父物体对应的第几个子物体，主要用于高效率处理父子关系变化等
 	GameObject* m_Parent;						//父层物体指针
 	std::vector<GameObject*> m_children;		//子层物体指针
-	bool m_updateFlag;							//更新flag，为true时需要更新，脏标记模式
+	char m_updateFlag;							//更新flag，从低位到高位共3位，分别负责position，scale，rotation，为1时说明需要更新
 
 public:
 	GameObject();
@@ -44,40 +44,22 @@ public:
 	void Awake(GameObject* parent, const Vec3& localPos) override;	//作为指定物体的子物体，且设置初始local坐标
 
 	/// <summary>
-	/// 获取世界坐标，使用时将更新包括自己在内的所有flag为true的父系
+	/// 获取世界坐标，使用时将更新包括自己在内的所有flag不为0的父系
 	/// </summary>
 	/// <returns></returns>
 	Vec3 GetPosition();
 
 	/// <summary>
-	/// 设置世界坐标，会直接更新局部坐标
-	/// </summary>
-	/// <param name="newPos"></param>
-	void SetPosition(const Vec3& newPos);
-
-	/// <summary>
-	/// 获取世界旋转，使用时将更新包括自己在内的所有flag为true的父系
-	/// </summary>
-	/// <returns></returns>
-	Quaternion GetRotation();
-
-	/// <summary>
-	/// 设置世界旋转，会直接更新局部旋转
-	/// </summary>
-	/// <param name="newRotation"></param>
-	void SetRotation(const Quaternion& newRotation);
-
-	/// <summary>
-	/// 获取世界缩放，使用时将更新包括自己在内的所有flag为true的父系
+	/// 获取世界缩放，使用时将更新包括自己在内的所有flag不为0的父系
 	/// </summary>
 	/// <returns></returns>
 	Vec3 GetScale();
 
 	/// <summary>
-	/// 设置世界缩放，会直接更新局部缩放
+	/// 获取世界旋转，使用时将更新包括自己在内的所有不为0的父系
 	/// </summary>
-	/// <param name="newScale"></param>
-	void SetScale(const Vec3& newScale);
+	/// <returns></returns>
+	Quaternion GetRotation();
 
 	/// <summary>
 	/// 获取局部坐标
@@ -88,7 +70,7 @@ public:
 	}
 
 	/// <summary>
-	/// 设置局部坐标，会更新标记
+	/// 设置局部坐标，会刷新flag的最低位
 	/// </summary>
 	/// <param name="newPos"></param>
 	void SetLocalPosition(const Vec3& newPos);
@@ -102,7 +84,7 @@ public:
 	}
 
 	/// <summary>
-	/// 设置局部旋转，会更新标记
+	/// 设置局部旋转，会刷新flag的最低和最高位
 	/// </summary>
 	/// <param name="newRotation"></param>
 	void SetLocalRotation(const Quaternion& newRotation);
@@ -116,7 +98,7 @@ public:
 	}                                           
 
 	/// <summary>
-	/// 设置局部缩放，会更新标记
+	/// 设置局部缩放，会刷新flag的最低和次低位
 	/// </summary>
 	/// <param name="newScale"></param>
 	void SetLocalScale(const Vec3& newScale);
@@ -150,7 +132,7 @@ public:
 	/// </summary>
 	/// <param name="index"></param>
 	/// <returns></returns>
-	GameObject* GetChild(int index);
+	GameObject* GetChild(unsigned int  index);
 
 	/// <summary>
 	/// 重设父实体，
@@ -167,7 +149,7 @@ public:
 	/// </summary>
 	/// <param name="index"></param>
 	/// <returns></returns>
-	bool MakeIndep(int index);
+	bool MakeIndep(unsigned int  index);
 
 	/// <summary>
 	/// 若child不属于直接子物体，则不做动作返回false，否则返回true
@@ -186,10 +168,15 @@ private:
 	/// <summary>
 	/// 重置Flag
 	/// </summary>
-	void ResetFlags();
+	/// <param name="flag">位控制flag，只能是1,2,4的组合</param>
+	void ResetFlags(char flag);
 	/// <summary>
 	/// 用于更新父子关系（不加判断）
 	/// </summary>
 	/// <param name="newParent"></param>
 	void SetParentWithoutJudge(GameObject* newParent);
+	/// <summary>
+	/// 用于更新当前位置，关闭flag
+	/// </summary>
+	void UpdateTrans();
 };

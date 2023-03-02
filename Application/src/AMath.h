@@ -475,6 +475,13 @@ public:
 	}
 
 	/// <summary>
+	/// 旋转向量
+	/// </summary>
+	/// <param name="rotation"></param>
+	/// <returns></returns>
+	Vec3 Rotate(const Quaternion& rotation) const;
+
+	/// <summary>
 	/// 向量线性插值
 	/// </summary>
 	/// <param name="other">作为目的点</param>
@@ -817,6 +824,7 @@ public:
 /// </summary>
 class Quaternion final
 {
+	friend Vec3;
 private:
 	float m_w, m_x, m_y, m_z;
 public:

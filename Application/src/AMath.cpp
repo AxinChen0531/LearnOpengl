@@ -124,6 +124,19 @@ Vec3 Vec3::Normalized() const
 		return Vec3::Zero();
 }
 
+Vec3 Vec3::Rotate(const Quaternion& rotation) const
+{
+	float x1 = rotation.m_w * m_x + rotation.m_z * m_y - rotation.m_y * m_z;
+	float y1 = rotation.m_w * m_y + rotation.m_x * m_z - rotation.m_z * m_x;
+	float z1 = rotation.m_w * m_z + rotation.m_y * m_x - rotation.m_x * m_y;
+	float w1 = -rotation.m_x * m_x - rotation.m_y * m_y - rotation.m_z * m_z;
+	return Vec3(
+		x1 * rotation.m_w - z1 * rotation.m_y + y1 * rotation.m_z - w1 * rotation.m_x,
+		z1 * rotation.m_x - w1 * rotation.m_y + y1 * rotation.m_w - x1 * rotation.m_z,
+		x1 * rotation.m_y - w1 * rotation.m_z + z1 * rotation.m_w - y1 * rotation.m_x
+	);
+}
+
 Vec3 Vec3::Lerp(const Vec3& other, float k, bool limit) const
 {
 	if (limit)

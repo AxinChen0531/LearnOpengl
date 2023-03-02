@@ -8,8 +8,9 @@
 #include "GameObject.h"
 
 GameObject GameObject::SceneRoot = GameObject();
+unsigned long long GameObject::cid = 0;
 
-GameObject::GameObject() : m_indexAsChild(-1), m_Parent(nullptr), m_updateFlag(false), m_depth(0)
+GameObject::GameObject() : m_indexAsChild(-1), m_Parent(nullptr), m_updateFlag(0), m_depth(0)
 {
 	m_uid = cid++;
 }
@@ -53,9 +54,45 @@ void GameObject::Awake(GameObject* parent, const Vec3& localPos)
 	SetParentWithoutJudge(parent);
 }
 
-GameObject* GameObject::GetChild(int index)
+Vec3 GameObject::GetPosition()
 {
-	if (index < 0 || index >= m_children.size())
+	UpdateTrans();
+	return m_position;
+}
+
+Vec3 GameObject::GetScale()
+{
+	UpdateTrans();
+	return m_Scale;
+}
+
+Quaternion GameObject::GetRotation()
+{
+	UpdateTrans();
+	return m_Rotation;
+}
+
+void GameObject::SetLocalPosition(const Vec3& newPos)
+{
+	ResetFlags(1);
+	m_localPosition = newPos;
+}
+
+void GameObject::SetLocalRotation(const Quaternion& newRotation)
+{
+	ResetFlags(5);
+	m_LocalRotation = newRotation;
+}
+
+void GameObject::SetLocalScale(const Vec3& newScale)
+{
+	ResetFlags(3);
+	m_localScale = newScale;
+}
+
+GameObject* GameObject::GetChild(unsigned int  index)
+{
+	if (index >= m_children.size())
 		return nullptr;
 	return m_children[index];
 }
@@ -81,9 +118,9 @@ bool GameObject::SetParent(GameObject* newParent)
 	}
 }
 
-bool GameObject::MakeIndep(int index)
+bool GameObject::MakeIndep(unsigned int index)
 {
-	if (index < 0 || index >= m_children.size())
+	if (index >= m_children.size())
 		return false;
 	m_children[index]->SetParentWithoutJudge(&SceneRoot);
 	return true;
@@ -94,7 +131,7 @@ bool GameObject::MakeIndep(GameObject* child)
 	if (child->m_Parent != this)
 		return false;
 	child->SetParentWithoutJudge(&SceneRoot);
-	return false;
+	return true;
 }
 
 void GameObject::ResetDepth(int depth)
@@ -102,21 +139,22 @@ void GameObject::ResetDepth(int depth)
 	m_depth = depth;
 	depth++;
 	for (GameObject* p : m_children)
-		ResetDepth(depth);
+		p->ResetDepth(depth);
 }
 
-void GameObject::ResetFlags()
+void GameObject::ResetFlags(char flag)
 {
-	if (ResetFlags)
+	char t = m_updateFlag | flag;
+	if (t == m_updateFlag)
 		return;
-	m_updateFlag = true;
+	m_updateFlag = t;
 	for (GameObject* p : m_children)
-		ResetFlags();
+		p->ResetFlags(flag);
 }
 
 void GameObject::SetParentWithoutJudge(GameObject* newParent)
 {
-	ResetFlags();
+	ResetFlags(7);
 	if (m_Parent) {
 		m_Parent->m_children.back()->m_indexAsChild = m_indexAsChild;
 		m_Parent->m_children[m_indexAsChild] = m_children.back();
@@ -126,4 +164,18 @@ void GameObject::SetParentWithoutJudge(GameObject* newParent)
 	m_indexAsChild = newParent->m_children.size();
 	ResetDepth(newParent->m_depth + 1);
 	newParent->m_children.push_back(this);
+}
+
+void GameObject::UpdateTrans()
+{
+	if (!m_updateFlag)
+		return;
+	m_Parent->UpdateTrans();
+	if (m_updateFlag & 1)
+		m_position = (m_localPosition * m_Parent->m_Scale).Rotate(m_Parent->m_Rotation) + m_Parent->m_position;
+	if (m_updateFlag & 2)
+		m_Scale = m_localScale * m_Parent->m_Scale;
+	if (m_updateFlag & 4)
+		m_Rotation = m_LocalRotation * m_Parent->m_Rotation;
+	m_updateFlag = 0;
 }
