@@ -13,7 +13,7 @@
 #include "AMath.h"
 #include "Object.h"
 
-class GameObject : public Entity, public IAwake, public IAwake1<GameObject*>, public IAwake2<GameObject*, const Vec3&>
+class GameObject final : public Entity, public IAwake, public IAwake1<GameObject*>, public IAwake2<GameObject*, const Vec3&>
 {
 private:
 	static unsigned long long cid;				//用于组织GO的ID，确保此数永远递增，runntime过程中所有GO不会重号
@@ -95,7 +95,7 @@ public:
 	/// <returns></returns>
 	inline Vec3 GetLocalScale() const {
 		return m_localScale;
-	}                                           
+	}
 
 	/// <summary>
 	/// 设置局部缩放，会刷新flag的最低和次低位

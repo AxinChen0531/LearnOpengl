@@ -15,7 +15,7 @@
 
 class Renderer : public Component, public IAwake2<std::shared_ptr<Mesh>&, std::shared_ptr<Material>&>
 {
-private:
+protected:
 	std::shared_ptr<Mesh> m_mesh;		//网格指针
 	std::shared_ptr<Material> m_mat;	//材质指针
 
@@ -42,5 +42,5 @@ public:
 	/// <summary>
 	/// 利用管理的网格和材质进行渲染
 	/// </summary>
-	void Render() const;
+	virtual void Render() const;
 };

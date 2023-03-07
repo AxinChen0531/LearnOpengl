@@ -8,6 +8,7 @@
 #include <GL/glew.h>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 #include "Shader.h"
 #include "Log.h"
@@ -40,6 +41,24 @@ void Shader::CompileShader(const char* vertexShader, const char* fragmentShader)
 	}
 }
 
+void Shader::Include(const std::string& path, std::stringstream& ss) const
+{
+	std::string dirPath = path.substr(0, path.find_last_of("/\\") + 1);
+	std::ifstream stream(path);
+	std::string line;
+	if (stream.fail()) 
+		Log::Error("Shader include file not found", "PathERR");
+	while (std::getline(stream, line)) {
+		if (line.find("#include") != std::string::npos) {
+			int start = line.find('\"');
+			int end = line.find('\"', start + 1);
+			Include(dirPath + line.substr(start + 1, end - start - 1), ss);
+		}
+		else
+			ss << line << std::endl;
+	}
+}
+
 Shader::Shader(const char* vertexShader, const char* fragmentShader)
 {
 	CompileShader(vertexShader, fragmentShader);
@@ -49,8 +68,12 @@ Shader::Shader(const char* shaderfilePath)
 {
 	std::stringstream ss[2];
 	std::ifstream stream(shaderfilePath);
+	std::string path(shaderfilePath);
+	std::string dirPath = path.substr(0, path.find_last_of("/\\") + 1);
 	std::string line;
 	int index = 0;
+	ss[0] << "#version 330 core" << std::endl;
+	ss[1] << "#version 330 core" << std::endl;
 	if (stream.fail()) 
 		Log::Error("Shader file not found", "PathERR");
 	while (std::getline(stream, line)) {
@@ -58,6 +81,11 @@ Shader::Shader(const char* shaderfilePath)
 			index = 0;
 		else if (line.find("#Fragment") != std::string::npos)
 			index = 1;
+		else if (line.find("#include") != std::string::npos) {
+			int start = line.find("\"");
+			int end = line.find("\"", start + 1);
+			Include(dirPath + line.substr(start + 1, end - start - 1), ss[index]);
+		}
 		else
 			ss[index] << line << std::endl;
 	}

@@ -7,12 +7,14 @@
 
 #pragma once
 
+#include <string>
+
 class Shader final
 {
 private:
 	unsigned int m_vsid;	//顶点shader id
 	unsigned int m_fsid;	//片元shader id
-	void CompileShader(const char* vertexShader, const char* fragmentShader);
+
 public:
 	/// <summary>
 	/// 编译并保存shader程序
@@ -38,4 +40,13 @@ public:
 	/// <param name="vertid">顶点shader程序id数据位</param>
 	/// <param name="fragid">片元shader程序id数据位</param>
 	void GetID(unsigned int* vertid, unsigned int* fragid) const;
+
+private:
+	/// <summary>
+	/// 编译shader
+	/// </summary>
+	/// <param name="vertexShader"></param>
+	/// <param name="fragmentShader"></param>
+	void CompileShader(const char* vertexShader, const char* fragmentShader);
+	void Include(const std::string& path, std::stringstream& ss) const;
 };
