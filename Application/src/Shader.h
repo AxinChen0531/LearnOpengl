@@ -28,6 +28,7 @@ public:
 	/// </summary>
 	/// <param name="shaderfilePath">shader文本文件路径，格式请参考样例shader</param>
 	Shader(const char* shaderfilePath);
+	Shader(const Shader&) = delete;
 
 	/// <summary>
 	/// 析构时，删除并释放shader程序显存

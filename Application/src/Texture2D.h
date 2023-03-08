@@ -79,6 +79,7 @@ public:
 	/// <param name="w"></param>
 	/// <param name="h"></param>
 	Texture2D(int w, int h);
+	Texture2D(const Texture2D&) = delete;
 
 	/// <summary>
 	/// 析构时，将释放纹理数据显存

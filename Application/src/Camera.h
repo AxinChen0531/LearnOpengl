@@ -61,6 +61,7 @@ private:
 
 public:
 	Camera();
+	Camera(const Camera&) = delete;
 	void Awake(ProjectionType pt) override;
 	~Camera() override;
 	inline const type_info* GetTypeInfo() const override {

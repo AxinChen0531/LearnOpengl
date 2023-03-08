@@ -83,6 +83,7 @@ public:
 	/// </summary>
 	/// <param name="shader">对应shader对象</param>
 	Material(const Shader* shader);
+	Material(const Material&) = delete;
 
 	/// <summary>
 	/// 析构时，将删除该shader程序实例显存

@@ -31,6 +31,7 @@ public:
 	/// <param name="indices">索引数据起点指针</param>
 	/// <param name="icount">索引数据个数</param>
 	Mesh(float* vertices, int vcsize, unsigned int* indices, int icount);
+	Mesh(const Mesh&) = delete;
 
 	/// <summary>
 	/// 析构时，将释放网格数据显存

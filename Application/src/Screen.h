@@ -30,6 +30,7 @@ public:
 	/// <param name="w">窗口宽</param>
 	/// <param name="h">窗口高</param>
 	Screen(int w, int h);
+	Screen(const Screen&) = delete;
 
 	/// <summary>
 	/// 获取全局唯一的Screen

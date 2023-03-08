@@ -21,6 +21,7 @@ protected:
 
 public:
 	Renderer();
+	Renderer(const Renderer&) = delete;
 	/// <summary>
 	/// 传入的网格和对应材质，作为一个渲染单元
 	/// 请统一对网格和材质管理对象使用智能指针进行管理，避免出现资源为空，渲染错误的情况

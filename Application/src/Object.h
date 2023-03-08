@@ -81,6 +81,7 @@ private:
 
 public:
 	Component();
+	Component(const Component&) = delete;
 	virtual ~Component();
 	bool IsDisposed;		//用于控制释放
 
@@ -114,6 +115,7 @@ private:
 
 public:
 	Entity();
+	Entity(const Entity&) = delete;
 	virtual ~Entity();
 
 	virtual void Dispose() override;

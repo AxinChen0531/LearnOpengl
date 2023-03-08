@@ -37,6 +37,7 @@ private:
 
 public:
 	GameObject();
+	GameObject(const GameObject&) = delete;
 	~GameObject() override;
 	void Dispose() override;										//接触父关系，所有子系全部dispose
 	void Awake() override;											//全默认，作为SceneRoot直接子物体
