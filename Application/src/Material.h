@@ -191,17 +191,17 @@ public:
 	inline float GetFloat(std::string name) {
 		return GetFloat(GetUniformID(name));
 	}
-	float* GetVecf(int id) const;
-	inline float* GetVecf(std::string name) {
-		return GetVecf(GetUniformID(name));
+	void GetVecf(int id, float* arr) const;
+	inline void GetVecf(std::string name, float* arr) {
+		GetVecf(GetUniformID(name), arr);
 	}
 	int GetInt(int id) const;
 	inline int GetInt(std::string name) {
 		return GetInt(GetUniformID(name));
 	}
-	int* GetVeci(int id) const;
-	inline int* GetVeci(std::string name) {
-		return GetVeci(GetUniformID(name));
+	void GetVeci(int id, int* arr) const;
+	inline void GetVeci(std::string name, int* arr) {
+		GetVeci(GetUniformID(name), arr);
 	}
 
 	void SetTexture2D(int id, std::shared_ptr<Texture2D>& t2d);
@@ -228,11 +228,7 @@ public:
 	/// </summary>
 	/// <param name="srcf"></param>
 	/// <param name="dstf"></param>
-	inline void SetBlendParam(const BlendParam srcf, const BlendParam dstf) {
-		m_srcfactor = srcf;
-		m_dstfactor = dstf;
-		m_needBlend = true;
-	}
+	void SetBlendParam(const BlendParam srcf, const BlendParam dstf);
 
 	/// <summary>
 	/// ∆Ù”√…Ó∂»≤‚ ‘

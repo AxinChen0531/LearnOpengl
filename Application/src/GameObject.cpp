@@ -7,7 +7,7 @@
 
 #include "GameObject.h"
 
-GameObject GameObject::SceneRoot = GameObject();
+GameObject GameObject::SceneRoot;
 unsigned long long GameObject::cid = 0;
 
 GameObject::GameObject() : m_indexAsChild(-1), m_Parent(nullptr), m_updateFlag(0), m_depth(0)

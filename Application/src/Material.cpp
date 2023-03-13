@@ -10,7 +10,7 @@
 
 Material::Material(const Shader* shader) : m_needBlend(true), m_needZTest(true), m_needZWrite(true), 
 										   m_srcfactor(BlendParam::SRC_ALPHA), m_dstfactor(BlendParam::ONE_MINUS_SRC_ALPHA), 
-										   m_zTestCondition(ZTestCondition::LESS), 
+										   m_zTestCondition(ZTestCondition::LESS_OR_EQUAL), 
 										   m_texSlotOccupied(0)
 {
 	m_id = glCreateProgram();
@@ -75,37 +75,40 @@ int Material::GetUniformID(const std::string name)
 float Material::GetFloat(int id) const
 {
 	glUseProgram(m_id);
-	float* p = nullptr;
-	glGetUniformfv(m_id, id, p);
-	glUseProgram(0);
-	return *p;
-}
-
-float* Material::GetVecf(int id) const
-{
-	glUseProgram(m_id);
-	float* p = nullptr;
-	glGetUniformfv(m_id, id, p);
+	float p = 0;
+	glGetUniformfv(m_id, id, &p);
 	glUseProgram(0);
 	return p;
+}
+
+void Material::GetVecf(int id, float* arr) const
+{
+	glUseProgram(m_id);
+	glGetUniformfv(m_id, id, arr);
+	glUseProgram(0);
 }
 
 int Material::GetInt(int id) const
 {
 	glUseProgram(m_id);
-	int* p = nullptr;
-	glGetUniformiv(m_id, id, p);
-	glUseProgram(0);
-	return *p;
-}
-
-int* Material::GetVeci(int id) const
-{
-	glUseProgram(m_id);
-	int* p = nullptr;
-	glGetUniformiv(m_id, id, p);
+	int p = 0;
+	glGetUniformiv(m_id, id, &p);
 	glUseProgram(0);
 	return p;
+}
+
+void Material::GetVeci(int id, int* arr) const
+{
+	glUseProgram(m_id);
+	glGetUniformiv(m_id, id, arr);
+	glUseProgram(0);
+}
+
+void Material::SetBlendParam(const BlendParam srcf, const BlendParam dstf)
+{
+	m_srcfactor = srcf;
+	m_dstfactor = dstf;
+	m_needBlend = true;
 }
 
 void Material::SetTexture2D(int id, std::shared_ptr<Texture2D>& t2d) 
